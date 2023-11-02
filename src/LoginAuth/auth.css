@@ -1,0 +1,43 @@
+.Login-Container {
+    display: flex;
+    justify-content: center; 
+    align-items: center; 
+    height: 100vh; 
+    background-color: #23404B;
+}
+
+.centered-paper {
+    width: 15%;
+    height: 500px;
+    padding: 5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    justify-content: space-around;
+}
+
+.login-input {
+    width: 100%;
+}
+
+.signUp-btn {
+    width: 100%;
+}
+.alt-signUp-btns-container {
+    width: 100%;
+    display: flex;
+    justify-content: flex-start;
+}
+
+
+.signUp-header {
+    font-size: var(--text-4xl-font-size);
+}
+
+.change-login {
+    border: none;
+    text-decoration: underline;
+    color: lightblue;
+    background: none;
+}

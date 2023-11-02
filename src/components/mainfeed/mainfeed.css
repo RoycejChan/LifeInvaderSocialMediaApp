@@ -1,0 +1,61 @@
+.mainfeed {
+    width: 40%;
+    padding:3rem;
+    background-color: #15181c;
+    border-radius: 3%;
+}
+.addPost {
+    width:25%;
+    margin-top: 1rem !important;
+}
+.userpost {
+    display:flex;
+    flex-direction: column;
+}
+.apost {
+    display: flex;
+    width:100%;
+    gap:2rem;
+    margin: 2.5rem 0rem;
+}
+
+.pfp-img-container {
+    display: flex;
+    justify-content: center;
+    margin-top: auto;
+    margin-bottom: auto;
+    width: 10%;
+    height: 100%;
+
+}
+.pfp-img-container img {
+    width: 100%;
+}
+
+.mainpost {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.upperpost {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 100%;
+    align-items: center;
+}
+
+.post-message {
+    padding: 1rem;
+}
+
+
+.post-btns {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+}
+.post-btn {
+    color:#343a40;
+}

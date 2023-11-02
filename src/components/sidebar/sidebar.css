@@ -1,0 +1,14 @@
+.Sidebar {
+
+    width:15%;
+    display:flex;
+    justify-content: center;
+    height: 400px;
+    background-color: #15181c;
+    border-radius: 3%;
+    padding: 1.3rem 0rem;
+}
+
+.sideBar-Icon {
+    color:white;
+}
