@@ -1,12 +1,14 @@
 import React, { useState } from "react";
 import { auth, GoogleProvider, db } from "../FB-config/Firebase-config";
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword ,signInWithPopup, updateProfile} from 'firebase/auth'; 
+import {doc, setDoc, getDoc} from 'firebase/firestore'
+
 import Button from '@mui/material/Button';
 import Paper from '@mui/material/Paper';
 import TextField from '@mui/material/TextField';
-import {doc, setDoc, getDoc, updateDoc} from 'firebase/firestore'
+
 import Homepage from "../components/homepage"
-import { useUser } from "../components/usercontext";
+import { useUser } from "../components/usercontext"; //userContext
 
 
 export default function Auth() { 
@@ -58,7 +60,7 @@ export default function Auth() {
             }
           };
     
-          
+
 
 
         const signIn = async () => {

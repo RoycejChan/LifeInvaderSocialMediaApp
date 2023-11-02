@@ -1,17 +1,18 @@
 import React, { useState, useEffect } from "react"
 
+import { db } from "../../FB-config/Firebase-config.js" 
+import { collection, doc, getDocs, setDoc } from 'firebase/firestore';
+
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import ForumIcon from '@mui/icons-material/Forum';
 import RepeatOneIcon from '@mui/icons-material/RepeatOne';
-import ClearIcon from '@mui/icons-material/Clear';
 
-import { db } from "../../FB-config/Firebase-config.js" 
-import { collection, doc, getDocs, setDoc } from 'firebase/firestore';
 
 import "./mainfeed.css"
 import pfp from "../../assets/defaultpfp.png"
+
 const MainFeed = ({user}) => {
 
   const [newpost, setNewPost] = useState("");

@@ -1,7 +1,36 @@
 .profile-container {
     width: 27%;
-    padding:3rem;
-    background-color: #15181c;
+    padding:2rem;
+    background-color: #15181c !important;
     border-radius: 3%;
     color:white;
 }
+
+.profile-header {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.back-to-home-page {
+    flex-grow: 1;
+}
+
+.profile-header-username {
+    font-weight: 800;
+
+}
+.profile-header-details {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 8;
+}
+
+.profile-postAmount {
+    margin-top: -1rem ;
+
+}
+.editProfile {
+    height: 0%;
+}
+

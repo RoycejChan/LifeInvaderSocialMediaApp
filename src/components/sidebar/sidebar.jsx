@@ -31,7 +31,7 @@ const SideBar = () => {
 
 const toProfile = () => {
   console.log("yes")
-  navigate('/profile');
+  navigate('/profile', { state: { user } });
 
 }
 
