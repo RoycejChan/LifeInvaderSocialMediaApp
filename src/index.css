@@ -69,7 +69,7 @@ li, ul {
   margin-top: 3rem;
 }
 
-Button {
+Button { /* MATERIAL UI BUTTON tag */
   cursor: pointer;
   color: White;
-}
+} 

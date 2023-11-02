@@ -29,7 +29,6 @@ const UsersBar = () => {
   
       // Get the first 'numUsers' randomized users
       const randomUsers = users.slice(0, numUsers);
-      console.log(randomUsers);
       setRandomUsers(randomUsers);
     } catch (error) {
       console.error('Error getting random users:', error);

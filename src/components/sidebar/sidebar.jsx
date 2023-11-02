@@ -1,9 +1,15 @@
 import React from "react"
+import { useNavigate, Link } from "react-router-dom";
 
+import { auth } from "../../FB-config/Firebase-config";
+import { signOut } from "firebase/auth";
+import { useUser } from "../usercontext";
+
+import Auth from "../../LoginAuth/auth";
 import './sidebar.css'
+import Profile from "./profile/profile";
 
 import Button from '@mui/material/Button';
-
 import BugReportIcon from '@mui/icons-material/BugReport';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
@@ -16,82 +22,105 @@ import SearchIcon from '@mui/icons-material/Search';
 import MailIcon from '@mui/icons-material/Mail';
 import LogoutIcon from '@mui/icons-material/Logout';
 
-const SideBar = () => {
 
+const SideBar = () => {
+  const { userData, setUser } = useUser();
+  const user = userData;
+  const navigate = useNavigate();
+
+
+const toProfile = () => {
+  console.log("yes")
+  navigate('/profile');
+
+}
+
+const logout = () => {
+  signOut(auth).then(()=> {
+    console.log("Sing out success");
+    setUser(null)
+    navigate('/');
+  }).catch((err) => {
+    console.log(err);
+  })
+}
 
     return (
+              <div className="Sidebar">
+                    
+                <List>
+                  <Link to="/homepage">
+                    <ListItem>
+                    <Button variant="text">
+                      <ListItemIcon>
+                        <HomeIcon className="sideBar-Icon"/>
+                      </ListItemIcon>
+                      <ListItemText
+                        primary="Home" className="sideBar-Icon"
+                      />
+                      </Button>
+                    </ListItem>
+                    </Link>
 
-          <div className="Sidebar">
-                
-            <List>
-                <ListItem>
-                <Button variant="text">
-                  <ListItemIcon>
-                    <HomeIcon className="sideBar-Icon"/>
-                  </ListItemIcon>
-                  <ListItemText
-                    primary="Home" className="sideBar-Icon"
-                  />
-                  </Button>
-                </ListItem>
-                <ListItem>
-                <Button variant="text">
+                    <ListItem>
+                    <Button variant="text"  onClick={()=>{toProfile()}}>
+                      <ListItemIcon>
+                        <PersonIcon className="sideBar-Icon"/>
+                      </ListItemIcon>
+                      <ListItemText
+                        primary="Profile" className="sideBar-Icon"
+                      />
+                      </Button>
+                    </ListItem>
+                    <ListItem>
+                    <Button variant="text">
+                      <ListItemIcon>
+                        <NotificationsIcon className="sideBar-Icon"/>
+                      </ListItemIcon>
+                      <ListItemText
+                        primary="Notifications" className="sideBar-Icon"
+                      />
+                      </Button>
+                    </ListItem>
 
-                  <ListItemIcon>
-                    <PersonIcon className="sideBar-Icon"/>
-                  </ListItemIcon>
-                  <ListItemText
-                    primary="Profile" className="sideBar-Icon"
-                  />
-                  </Button>
-                </ListItem>
-                <ListItem>
-                <Button variant="text">
+                    <ListItem>
+                    <Button variant="text">
 
-                  <ListItemIcon>
-                    <NotificationsIcon className="sideBar-Icon"/>
-                  </ListItemIcon>
-                  <ListItemText
-                    primary="Notifications" className="sideBar-Icon"
-                  />
-                  </Button>
-                </ListItem>
-                <ListItem>
-                <Button variant="text">
+                      <ListItemIcon>
+                        <MailIcon className="sideBar-Icon"/>
+                      </ListItemIcon>
+                      <ListItemText
+                        primary="Messages" className="sideBar-Icon"
+                      />
+                      </Button>
+                    </ListItem>
 
-                  <ListItemIcon>
-                    <MailIcon className="sideBar-Icon"/>
-                  </ListItemIcon>
-                  <ListItemText
-                    primary="Messages" className="sideBar-Icon"
-                  />
-                  </Button>
-                </ListItem>
-                <ListItem>
-                <Button variant="text">
+                    <ListItem>
+                    <Button variant="text">
+                      <ListItemIcon>
+                        <SearchIcon className="sideBar-Icon"/>
+                      </ListItemIcon>
+                      <ListItemText
+                        primary="Search" className="sideBar-Icon"
+                      />
+                      </Button>
+                    </ListItem>
 
-                  <ListItemIcon>
-                    <SearchIcon className="sideBar-Icon"/>
-                  </ListItemIcon>
-                  <ListItemText
-                    primary="Search" className="sideBar-Icon"
-                  />
-                  </Button>
-                </ListItem>
-                <ListItem>
-                <Button variant="text">
-
-                  <ListItemIcon>
-                    <LogoutIcon className="sideBar-Icon"/>
-                  </ListItemIcon>
-                  <ListItemText
-                    primary="Logout" className="sideBar-Icon"
-                  />
-                  </Button>
-                </ListItem>
-            </List>
-          </div>
-
+                    <Link to="/">
+                      <ListItem>
+                          <Button variant="text" onClick={()=>{logout()}}>
+                              <ListItemIcon>
+                                <LogoutIcon className="sideBar-Icon"/>
+                              </ListItemIcon>
+                              <ListItemText
+                                primary="Logout" className="sideBar-Icon"
+                              />
+                          </Button>
+                      </ListItem>
+                    </Link>
+                </List>
+              </div>
+    
   
       )
   }

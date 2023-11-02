@@ -6,17 +6,17 @@ import Paper from '@mui/material/Paper';
 import TextField from '@mui/material/TextField';
 import {doc, setDoc, getDoc, updateDoc} from 'firebase/firestore'
 import Homepage from "../components/homepage"
-
+import { useUser } from "../components/usercontext";
 
 
 export default function Auth() { 
+        const { userData, setUser } = useUser(); // Use the useUser hook to access userData and setUser
 
         const [username, setUsername] = useState("");
         const [email, setEmail] = useState("");
         const [password, setPassword] = useState("");
         const [notSignedUp, setUserLog] = useState(false);
         const [loginError, setLoginError] = useState("");
-        const [user, setUser] = useState(null);
 
         const getUsernameFromDatabase = async (uid) => {
             try {
@@ -25,7 +25,6 @@ export default function Auth() {
           
               if (userDocSnapshot.exists()) {
                 const userData = userDocSnapshot.data();
-                console.log(userData.username)
                 return userData.username; 
               }
             } catch (error) {
@@ -38,7 +37,6 @@ export default function Auth() {
           const signUp = async () => {
             try {
               const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-              console.log('User profile created:', userCredential.user.uid);
           
               // Set the user data in the state
               const user = {
@@ -59,6 +57,9 @@ export default function Auth() {
               console.error(err);
             }
           };
+    
+          
+
 
         const signIn = async () => {
                 try {
@@ -67,7 +68,6 @@ export default function Auth() {
                  // Retrieve the username from firestore to include with signIN
                     const username = await getUsernameFromDatabase(userCredential.user.uid);
 
-                    console.log("User signed in successfully:", userCredential.user.email);
                      // Set the user data in the state
                      setUser({
                         uid: userCredential.user.uid,
@@ -91,8 +91,8 @@ export default function Auth() {
             }
         }
         
-        if (user) {
-            return <Homepage user={user}/>
+        if (userData) {
+            return <Homepage/>
         }
 
     return ( 

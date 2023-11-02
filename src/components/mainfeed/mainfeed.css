@@ -1,5 +1,5 @@
 .mainfeed {
-    width: 40%;
+    width: 27%;
     padding:3rem;
     background-color: #15181c;
     border-radius: 3%;
@@ -22,8 +22,7 @@
 .pfp-img-container {
     display: flex;
     justify-content: center;
-    margin-top: auto;
-    margin-bottom: auto;
+    margin-top: 3rem;
     width: 10%;
     height: 100%;
 
@@ -40,14 +39,24 @@
 
 .upperpost {
     display: flex;
-    flex-direction: row;
-    justify-content: space-between;
+    flex-direction:column;
     width: 100%;
-    align-items: center;
+}
+.usertags {
+    display: flex;
+    flex-direction: row;
+    gap:1rem;
+}
+.upperpost p {
+    height: 0px;
 }
 
 .post-message {
     padding: 1rem;
+}
+
+.textField_label {
+    color:white !important;
 }
 
 
@@ -58,4 +67,14 @@
 }
 .post-btn {
     color:#343a40;
+}
+
+.replying-to {
+    font-size: .8rem;
+}
+
+.usernameTag {
+    color:grey;
+    font-size: .9rem;
+    padding-top:3px ;
 }

@@ -81,9 +81,12 @@ const MainFeed = ({user}) => {
               label="Post something ..."
               multiline
               rows={4}
-              placeholder={`What's on your mind ${user.username}`}
+              // placeholder={`What's on your mind ${user.username}`}
               variant="standard"
               onChange={(e) => setNewPost(e.target.value)}
+              inputProps={{ style: { color: "white" } }}
+              InputLabelProps={{className:"textField_label"}}
+
             />
             <Button variant="outlined" onClick={()=>{addPost()}} className="addPost">Invade</Button>
         </div>
@@ -98,7 +101,11 @@ const MainFeed = ({user}) => {
                         </div>
                         <div className="mainpost">
                           <div className="upperpost">
-                            {post.Username}
+                            <p className="replying-to">Replying to @Elon</p>
+                              <div className="usertags">
+                                <p>{post.Username}</p>
+                                <p className="usernameTag">@{post.Username}</p>
+                              </div>
                           </div>
                           <p className="post-message">{post.Message}</p>
                           <div className="post-btns">
