@@ -92,24 +92,24 @@ const MainFeed = ({user}) => {
             <div className="postfeed">
               <ul>
               {posts.map((post) => (
-  <div key={post.id} className="apost">
-    <div className="pfp-img-container">
-      <img src={pfp} alt="PFP" />
-    </div>
-    <div className="mainpost">
-      <div className="upperpost">
-        {post.Username}
-      </div>
-      <p className="post-message">{post.Message}</p>
-      <div className="post-btns">
-        <Button variant="text"><ForumIcon className="post-btn"/></Button>
-        <Button variant="text"><ThumbUpIcon className="post-btn"/></Button>
-        <Button variant="text"><RepeatOneIcon className="post-btn"/></Button>
-      </div>
-      <hr className="post-separator" /> {/* Add a horizontal line at the bottom of each post */}
-    </div>
-  </div>
-))}
+                      <div key={post.id} className="apost">
+                        <div className="pfp-img-container">
+                          <img src={pfp} alt="PFP" />
+                        </div>
+                        <div className="mainpost">
+                          <div className="upperpost">
+                            {post.Username}
+                          </div>
+                          <p className="post-message">{post.Message}</p>
+                          <div className="post-btns">
+                            <Button variant="text"><ForumIcon className="post-btn"/></Button>
+                            <Button variant="text"><ThumbUpIcon className="post-btn"/></Button>
+                            <Button variant="text"><RepeatOneIcon className="post-btn"/></Button>
+                          </div>
+                          <hr className="post-separator" /> {/* Add a horizontal line at the bottom of each post */}
+                        </div>
+                      </div>
+                ))}
               </ul>
             </div>
 

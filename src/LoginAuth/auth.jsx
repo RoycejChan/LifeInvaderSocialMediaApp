@@ -4,7 +4,7 @@ import { createUserWithEmailAndPassword, signInWithEmailAndPassword ,signInWithP
 import Button from '@mui/material/Button';
 import Paper from '@mui/material/Paper';
 import TextField from '@mui/material/TextField';
-import {doc, setDoc, getDoc} from 'firebase/firestore'
+import {doc, setDoc, getDoc, updateDoc} from 'firebase/firestore'
 import Homepage from "../components/homepage"
 
 
@@ -35,29 +35,30 @@ export default function Auth() {
             return null; 
           };
 
-        const signUp = async () => {
+          const signUp = async () => {
             try {
-                const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-                console.log("User profile created:", userCredential.user.uid);
-                
-                const username = await getUsernameFromDatabase(userCredential.user.uid);
+              const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+              console.log('User profile created:', userCredential.user.uid);
+          
+              // Set the user data in the state
+              const user = {
+                uid: userCredential.user.uid,
+                username: username, // Assuming you have a `username` variable
+              };
+              setUser(user);
 
-                // Set the user data in the state
-                setUser({
-                    uid: userCredential.user.uid,
-                    email: userCredential.user.email,
-                    username: username,
-                });
-                // Create a user profile in Firestore
-                const userDocRef = doc(db, 'users', userCredential.user.uid);
-                await setDoc(userDocRef, {
-                    email: email,
-                    username: username,
-                });
+              const userDocRef = doc(db, 'users', userCredential.user.uid);
+              await setDoc(userDocRef, {
+                email: userCredential.user.email,
+                username: username,
+              })
+              .catch((error) => {
+                console.error('Error creating user document:', error);
+            });
             } catch (err) {
-                console.error(err);
+              console.error(err);
             }
-        }
+          };
 
         const signIn = async () => {
                 try {
@@ -71,7 +72,7 @@ export default function Auth() {
                      setUser({
                         uid: userCredential.user.uid,
                         email: userCredential.user.email,
-                        username: username,
+                        username: username
                     });
                 
             } catch (error) {

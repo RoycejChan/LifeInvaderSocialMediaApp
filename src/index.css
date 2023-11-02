@@ -46,13 +46,13 @@ button {
   cursor: pointer;
 }
 
-Button {
-  cursor: pointer;
-  color: White;
+a {
+  text-decoration-style: none;
 }
 
-li {
-  list-style-type: none;
+li, ul {
+  list-style-type: none !important;
+  padding-inline-start: 0px;
 }
 
 .post-separator {
@@ -67,4 +67,9 @@ li {
   justify-content: center;
   gap:5rem;
   margin-top: 3rem;
+}
+
+Button {
+  cursor: pointer;
+  color: White;
 }

@@ -1,7 +1,29 @@
 .usersbar {
     width: 15%;
-    padding:3rem;
     background-color: #15181c;
     border-radius: 3%;
-    height: 500px;
+    height: 720px;
+    padding: 2rem;
+}
+
+.suggestedUsers {
+    display: flex;
+    flex-direction: column;
+    gap:.5rem;
+}
+
+.randUser {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    
+}
+
+.randUser-username {
+    font-size: .85rem;
+}
+
+.stalk-Randuser {
+    width: 40% !important;
+    padding:0rem !important;
 }
