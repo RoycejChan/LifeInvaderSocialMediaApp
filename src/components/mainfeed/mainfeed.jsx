@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from "react"
+import React, { useState, useEffect, useContext } from "react"
+import { useUser } from "../usercontext.jsx";
 
 import { db } from "../../FB-config/Firebase-config.js" 
-import { collection, doc, getDocs, setDoc } from 'firebase/firestore';
+import { collection, doc, getDocs, setDoc, addDoc } from 'firebase/firestore';
 
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
@@ -13,7 +14,10 @@ import RepeatOneIcon from '@mui/icons-material/RepeatOne';
 import "./mainfeed.css"
 import pfp from "../../assets/defaultpfp.png"
 
-const MainFeed = ({user}) => {
+const MainFeed = () => {
+  const { userData, setUser } = useUser();
+  const user = userData;
+  console.log(user);
 
   const [newpost, setNewPost] = useState("");
 
@@ -59,9 +63,22 @@ const MainFeed = ({user}) => {
 
  const addPost = async () => {
   const currentDate = new Date();
-  const postRef = doc(collection(db, 'posts')); // Automatically generate a unique ID per posts db doc
 
-  await setDoc(postRef, {
+  // Add the post to the general 'posts' collection
+  const generalPostRef = doc(collection(db, 'posts')); // Automatically generate a unique ID for the general posts collection
+
+  await setDoc(generalPostRef, {
+    Username: user.username,
+    Message: newpost,
+    Date: currentDate,
+  });
+  // Step 1: Get a reference to the user's document
+  const userDocRef = doc(db, 'users', user.uid);
+  
+  // Step 2: Get a reference to the user's 'posts' subcollection
+  const userPostsCollectionRef = collection(userDocRef, 'posts');
+  
+  await addDoc(userPostsCollectionRef, {
     Username: user.username,
     Message: newpost,
     Date: currentDate,
@@ -82,7 +99,7 @@ const MainFeed = ({user}) => {
               label="Post something ..."
               multiline
               rows={4}
-              // placeholder={`What's on your mind ${user.username}`}
+              placeholder={`What's on your mind ${user.username}`}
               variant="standard"
               onChange={(e) => setNewPost(e.target.value)}
               inputProps={{ style: { color: "white" } }}

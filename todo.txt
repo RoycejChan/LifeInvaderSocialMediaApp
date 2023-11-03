@@ -1,0 +1,7 @@
+TODO: PROFILE SECTION :
+            ADD NAV BELOW PROFILE HEADER, POSTS AND REPLIES tab, 
+            make edit profile btn function to edit bio n stuff
+
+    Add functionality to buttons
+            make subcollections comments, liked, and reposts for each post
+            if length > 1 make red, or display amount on top right of icon

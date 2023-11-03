@@ -18,7 +18,6 @@ const UsersBar = () => {
       const collectionRef = collection(db, collectionName);
       const querySnapshot = await getDocs(collectionRef);
   
-      // Convert the querySnapshot to an array of user documents
       const users = querySnapshot.docs.map((doc) => ({
         id: doc.id,
         ...doc.data(),
@@ -40,10 +39,12 @@ const UsersBar = () => {
   };
   
   useEffect(() => {
-    // Use useEffect to fetch random users when the component mounts
+    // Use useEffect to fetch random users when the component mounts for suggested useres bar
     getRandomUsers(db, "users", 5);
   }, []);
 
+
+  //when user clicks a profile, change homescreen to that persons profile page
   const viewProfile = async (user) => {
     console.log(user);
     const docRef = doc(db, "users", user.id);

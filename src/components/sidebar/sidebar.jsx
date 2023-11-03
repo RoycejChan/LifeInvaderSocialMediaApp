@@ -24,8 +24,9 @@ import LogoutIcon from '@mui/icons-material/Logout';
 
 
 const SideBar = () => {
-  const { userData, setUser } = useUser();
-  const user = userData;
+  // const { userData, setUser } = useUser();
+  // const user = userData;
+  // console.log(user) forgot why i needed this?
   const navigate = useNavigate();
 
 
