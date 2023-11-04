@@ -1,0 +1,25 @@
+.reply-container {
+    position: absolute;
+    top:10%;
+    left:300px;
+    background-color:rgb(2, 37, 83);
+    border-radius: 3%;
+    width: 1500px;
+    padding:2rem;
+    z-index: 999;
+}
+
+.reply-header {
+    display: flex;
+    justify-content: space-between;
+}
+
+.reply-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.reply-btn {
+   padding-top: 2rem;
+}

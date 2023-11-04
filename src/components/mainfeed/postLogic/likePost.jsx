@@ -1,10 +1,10 @@
 import { doc, collection, getDocs, addDoc } from "firebase/firestore";
 import { db } from "../../../FB-config/Firebase-config";
 
-export const likePost = async (postId, username) => {
+export const likePost = async (post, user) => {
     try {
         // Step 1: Get a reference to the post document
-        const postRef = doc(db, 'posts', postId);
+        const postRef = doc(db, 'posts', post.id);
     
         // Step 2: Get a reference to the 'likes' subcollection of that post
         const likesCollectionRef = collection(postRef, 'likes');
@@ -18,8 +18,15 @@ export const likePost = async (postId, username) => {
         console.log('Like count:', likeCount);
     
         await addDoc(likesCollectionRef, {
-          Username: username
+          Username: user.username
         });
+
+        //add to user who liked likes sub collection
+        const userDocRef = doc(db, 'users', user.uid);
+        const userPostsCollectionRef = collection(userDocRef, 'likes');
+
+        await addDoc(userPostsCollectionRef, {post});
+
     
     
       } catch (error) {
