@@ -17,9 +17,7 @@ import RepeatOneIcon from '@mui/icons-material/RepeatOne';
 const Profile = () => {
     const location = useLocation();
     const userData = location.state.user; 
-    // const { userData, setUser } = useUser();
-    // const user = userData; // for viewing local own profile ??
-    console.log(userData)
+   
 
     const [posts, setPosts] = useState([]);
 
@@ -38,17 +36,21 @@ const Profile = () => {
     const fetchPosts = async () => {
       try {
 
+        //reference the persons posts
         const userDocRef = doc(db, 'users', userData.uid);
-        // Step 2: Get a reference to the user's 'posts' subcollection
+
+        //reference posts subcollection in userdata.uid user
         const userPostsCollectionRef = collection(userDocRef, 'posts');
+
+        //get the posts
         const querySnapshot = await getDocs(userPostsCollectionRef); 
         const postsData = []; 
+        
         querySnapshot.forEach((doc) => {
   
-          // For each document, get the data and add it to the postsData array
           const post = {
-            id: doc.id, // Document ID
-            ...doc.data(), // Post data
+            id: doc.id, 
+            ...doc.data(), 
           };
   
           postsData.push(post);

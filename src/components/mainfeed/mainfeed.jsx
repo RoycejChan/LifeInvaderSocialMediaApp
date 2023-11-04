@@ -1,8 +1,12 @@
 import React, { useState, useEffect, useContext } from "react"
 import { useUser } from "../usercontext.jsx";
+import { getPosts } from "./postLogic/getPosts.jsx";
+import { addPost } from "./postLogic/addPost.jsx";
+import { likePost } from "./postLogic/likePost.jsx";
+
 
 import { db } from "../../FB-config/Firebase-config.js" 
-import { collection, doc, getDocs, setDoc, addDoc } from 'firebase/firestore';
+import { collection, doc, getDocs, setDoc, addDoc, getCountFromServer } from 'firebase/firestore';
 
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
@@ -17,7 +21,6 @@ import pfp from "../../assets/defaultpfp.png"
 const MainFeed = () => {
   const { userData, setUser } = useUser();
   const user = userData;
-  console.log(user);
 
   const [newpost, setNewPost] = useState("");
 
@@ -25,66 +28,26 @@ const MainFeed = () => {
   const [posts, setPosts] = useState([]);
 
 
+//on page load, fetch posts from db, and display it,
+// logic fetchPosts function in getPosts.jsx
   useEffect(() => {
-    // Fetch posts when the component mounts
-    const fetchData = async () => {
-      const postsData = await fetchPosts();
+    const fetchPosts = async () => {
+      const postsData = await getPosts();
       setPosts(postsData);
     };
 
-    fetchData();
+    fetchPosts();
   }, []);
 
-  
-  const fetchPosts = async () => {
-    try {
-      const postsCollectionRef = collection(db, 'posts'); 
-      const querySnapshot = await getDocs(postsCollectionRef); 
-      const postsData = []; 
-      
-      querySnapshot.forEach((doc) => {
 
-        // For each document, get the data and add it to the postsData array
-        const post = {
-          id: doc.id, // Document ID
-          ...doc.data(), // Post data
-        };
+//Adds new post, logic is in addPost.jsx
+  const addNewPost = async () => {
+    await addPost(user, newpost);
+};
 
-        postsData.push(post);
-      });
-  
-      return postsData;
-    } catch (error) {
-      console.error("Error fetching posts:", error);
-      return [];
-    }
-  };
-
-
- const addPost = async () => {
-  const currentDate = new Date();
-
-  // Add the post to the general 'posts' collection
-  const generalPostRef = doc(collection(db, 'posts')); // Automatically generate a unique ID for the general posts collection
-
-  await setDoc(generalPostRef, {
-    Username: user.username,
-    Message: newpost,
-    Date: currentDate,
-  });
-  // Step 1: Get a reference to the user's document
-  const userDocRef = doc(db, 'users', user.uid);
-  
-  // Step 2: Get a reference to the user's 'posts' subcollection
-  const userPostsCollectionRef = collection(userDocRef, 'posts');
-  
-  await addDoc(userPostsCollectionRef, {
-    Username: user.username,
-    Message: newpost,
-    Date: currentDate,
-  });
-
-  console.log(newpost);
+//Like a post, increment like amount, logic in liekpost.jsx
+const likeaPost = async (postId) => {
+  await likePost(postId, user.username);
 };
 
     return (
@@ -106,7 +69,7 @@ const MainFeed = () => {
               InputLabelProps={{className:"textField_label"}}
 
             />
-            <Button variant="outlined" onClick={()=>{addPost()}} className="addPost">Invade</Button>
+            <Button variant="outlined" onClick={()=>{addNewPost()}} className="addPost">Invade</Button>
         </div>
 
         {/* POST FEED */}
@@ -128,7 +91,10 @@ const MainFeed = () => {
                           <p className="post-message">{post.Message}</p>
                           <div className="post-btns">
                             <Button variant="text"><ForumIcon className="post-btn"/></Button>
-                            <Button variant="text"><ThumbUpIcon className="post-btn"/></Button>
+                            <Button variant="text" onClick={()=>likeaPost(post.id)}>
+                                <ThumbUpIcon className="post-btn like-icon"/>
+                                <p className="postLikes">{post.likeCount}</p>
+                            </Button>
                             <Button variant="text"><RepeatOneIcon className="post-btn"/></Button>
                           </div>
                           <hr className="post-separator" /> {/* Add a horizontal line at the bottom of each post */}

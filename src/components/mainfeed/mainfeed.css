@@ -78,3 +78,12 @@
     font-size: .9rem;
     padding-top:3px ;
 }
+.like-icon {
+    position: relative;
+}
+.postLikes {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    font-weight: 800;
+}

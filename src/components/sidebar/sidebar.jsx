@@ -27,11 +27,15 @@ const SideBar = () => {
   // const { userData, setUser } = useUser();
   // const user = userData;
   // console.log(user) forgot why i needed this?
-  const navigate = useNavigate();
 
+  const { userData, setUser } = useUser();
+  const user = userData;
+  const navigate = useNavigate();
+  
 
 const toProfile = () => {
   console.log("yes")
+  console.log(user);
   navigate('/profile', { state: { user } });
 
 }
