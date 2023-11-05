@@ -13,19 +13,12 @@ export const getPosts = async () => {
       const fetchLikesPromises = querySnapshot.docs.map(async (docSnap) => {
         if (docSnap.id) {
           const postRef = doc(db, 'posts', docSnap.id);
-
-          const replyCollectionRef = collection(postRef, 'replies');
-          const replyQuerySnapshot = await getDocs(replyCollectionRef);
-          const replyCount = replyQuerySnapshot.size;
-      
-
           const likesCollectionRef = collection(postRef, 'likes');
           const likesQuerySnapshot = await getDocs(likesCollectionRef);
           const likeCount = likesQuerySnapshot.size;
           const post = {
             id: docSnap.id,
-            likes: likeCount,
-            replies: replyCount,
+            likeCount: likeCount,
             ...docSnap.data(),
           };
           postsData.push(post);

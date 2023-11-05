@@ -6,8 +6,14 @@ import { useState } from "react";
 
 export const sendaReply = async (postReplyingTo, user, date, msg) => {
     try {
+
+
+      const postRef = doc(db, 'posts', postReplyingTo.id);
+ 
+
+
+
     // Step 1: Get a reference to the post document
-    const postRef = doc(db, 'posts', postReplyingTo.id);
     
     // Step 2: Get a reference to the 'likes' subcollection of that post
     const repliesCollectionRef = collection(postRef, 'replies');

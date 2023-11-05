@@ -55,7 +55,8 @@ const Profile = () => {
   
           postsData.push(post);
           console.log(post);
-        });
+          console.log(post);
+                });
     
         return postsData;
       } catch (error) {
@@ -116,7 +117,9 @@ const Profile = () => {
                           <p className="post-message">{post.Message}</p>
                           <div className="post-btns">
                             <Button variant="text"><ForumIcon className="post-btn"/></Button>
-                            <Button variant="text"><ThumbUpIcon className="post-btn"/></Button>
+                            <Button variant="text"><ThumbUpIcon className="post-btn"/>
+                            <p className="postLikes">{post.likeCount}</p>
+                          </Button>
                             <Button variant="text"><RepeatOneIcon className="post-btn"/></Button>
                           </div>
                           <hr className="post-separator" /> {/* Add a horizontal line at the bottom of each post */}

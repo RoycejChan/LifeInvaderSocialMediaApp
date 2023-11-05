@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useContext } from "react"
+import { useNavigate } from "react-router-dom";
 import { useUser } from "../usercontext.jsx";
 import { getPosts } from "./postLogic/getPosts.jsx";
 import { addPost } from "./postLogic/addPost.jsx";
@@ -23,16 +24,13 @@ import pfp from "../../assets/defaultpfp.png"
 const MainFeed = () => {
   const { userData, setUser } = useUser();
   const user = userData; //user credentials
-  const currentDate = new Date(); //for future references
-  const [formattedDate, setformattedDate] = useState(0)
+  const navigate = useNavigate();
 
   const [newpost, setNewPost] = useState("");
   const [posts, setPosts] = useState([]);
   
-  const [replyMsg, setReplyMsg] = useState("");
-  const [replying, isReplying] = useState(false);
-  const [userReplyingTo, setUserReplyingTo] = useState("");
-  const [postReplyingTo, setPostReplyingTo] = useState({});
+
+
 
 //on page load, fetch posts from db, and display it,
 // logic fetchPosts function in getPosts.jsx
@@ -51,42 +49,18 @@ const MainFeed = () => {
 };
 //Like a post, increment like amount, logic in liekpost.jsx
 const likeaPost = async (post) => {
-  await likePost(post, user)
-  .then(console.log("you like a post"));
-};
-//OPEN MESSAGE REPLY POPUP
-const replyToaMsg = async (post) => {
-  
-  if(!replying) {
-    console.log(post.Username)
-    setPostReplyingTo(post);
-    setUserReplyingTo(post.Username);
-    const month = currentDate.getMonth() + 1; // Months are zero based? like array
-      const day = currentDate.getDate();
-      const year = currentDate.getFullYear();
-      const hours = currentDate.getHours();
-      const minutes = currentDate.getMinutes();
+  console.log(post);
+  await likePost(post, user).then(()=>{console.log(post.likes)})};
 
-  // Create a formatted date string in the "month/day/year. hours/minutes" format
-      setformattedDate(`${month}/${day}/${year} ${hours}:${minutes}`); 
-      
-    isReplying(true);
-   
-  } else {
-    isReplying(false);
-    setReplyMsg("");
-  }
-}
-//SEND MSG TO DB, adds msg to post -> replies subcollection & user who sent it -> replies subcollection
-const sendReply = async () => {
-  console.log(postReplyingTo); // .id = post id of posts collection not users collection  FIXME: also add like collection to user, not the general posts collection
 
-  await sendaReply(postReplyingTo, user, formattedDate, replyMsg)
-  .then(console.log("you replied to a message"));
 
+
+
+const navToPost = () => {
+  console.log("yes")
+  navigate('/viewPost', { state: { user } });
 
 }
-
 
 
 
@@ -116,7 +90,7 @@ const sendReply = async () => {
             <div className="postfeed">
               <ul>
               {posts.map((post) => (
-                      <div key={post.id} className="apost">
+                      <div key={post.id} className="apost" onClick={()=>navToPost()}>
                         <div className="pfp-img-container">
                           <img src={pfp} alt="PFP" />
                         </div>
@@ -132,10 +106,11 @@ const sendReply = async () => {
                           <div className="post-btns">
                             <Button variant="text" onClick={()=>replyToaMsg(post, user.username)}>
                               <ForumIcon className="post-btn"/>
+                              <p className="postLikes">{post.replies}</p>
                             </Button>
                             <Button variant="text" onClick={()=>likeaPost(post)}>
                                 <ThumbUpIcon className="post-btn like-icon"/>
-                                <p className="postLikes">{post.likeCount}</p>
+                                <p className="postLikes">{post.likes}</p>
                             </Button>
                             <Button variant="text"><RepeatOneIcon className="post-btn"/></Button>
                           </div>
@@ -144,34 +119,6 @@ const sendReply = async () => {
                       </div>
                 ))}
               </ul>
-              {replying ?
-              <>
-                <div className="reply-container">
-                  <div className="reply-header">
-                    <h4>Replying to {userReplyingTo}</h4>
-                    <Button onClick={()=>replyToaMsg()}>X</Button>
-                  </div>
-                  <TextField
-                    id="outlined-multiline-static"
-                    placeholder="What do you have to say about this post?"
-                    label="Reply Message"
-                    multiline
-                    rows={4}
-                    required
-                    fullWidth
-                    onChange={(e)=> setReplyMsg(e.target.value)}
-                 />
-                 <div className="reply-footer">
-                    <h4>{formattedDate}</h4>
-                    <div className="reply-btn">
-                      <Button onClick={()=>sendReply()}>Reply<SendIcon/></Button>
-                    </div>
-                 </div>
-                </div>
-              </>
-              :
-              <></>
-              } 
             </div>
 
 
