@@ -1,0 +1,42 @@
+.pfp-img-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 3rem;
+    width: 10%;
+    height: 100%;
+  }
+  
+  .pfp-img-container img {
+    width: 100%;
+  }
+
+.originalPost {
+    display:flex;
+    flex-direction: column;
+    gap:1rem;
+}
+
+.originalPostUser {
+    display:flex;
+    align-items: center;
+}
+
+.viewPost-btns {
+    padding:.5rem 0rem;
+}
+
+.userreply {
+    display: flex;
+    flex-direction: column;
+    gap: .5rem;
+}
+.addComment {
+    background-color: navy;
+    color:white;
+    padding:1em;
+    width: 140px;
+    border:none;
+    margin-left: auto;
+}
+

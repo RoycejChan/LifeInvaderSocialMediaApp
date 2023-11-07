@@ -18,3 +18,6 @@ make like limit 1 per user
 SHOW REPLIES on show replies buttton?
 
 FIXME: CANT REFERENCE NESTED SUB COLLECTIONS IN FIREBASE, = cant acces users->posts->likes to reference it on the individual users profile.
+
+//ALERT BOX ON LOGIN ERROR
+/ON SIGN UP, fetch bad words dictionary n make sure its not on there

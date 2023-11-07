@@ -24,9 +24,6 @@ import LogoutIcon from '@mui/icons-material/Logout';
 
 
 const SideBar = () => {
-  // const { userData, setUser } = useUser();
-  // const user = userData;
-  // console.log(user) forgot why i needed this?
 
   const { userData, setUser } = useUser();
   const user = userData;
@@ -34,15 +31,12 @@ const SideBar = () => {
   
 
 const toProfile = () => {
-  console.log("yes")
-  console.log(user);
   navigate('/profile', { state: { user } });
 
 }
 
 const logout = () => {
   signOut(auth).then(()=> {
-    console.log("Sing out success");
     setUser(null)
     navigate('/');
   }).catch((err) => {
@@ -77,36 +71,14 @@ const logout = () => {
                       />
                       </Button>
                     </ListItem>
-                    <ListItem>
-                    <Button variant="text">
-                      <ListItemIcon>
-                        <NotificationsIcon className="sideBar-Icon"/>
-                      </ListItemIcon>
-                      <ListItemText
-                        primary="Notifications" className="sideBar-Icon"
-                      />
-                      </Button>
-                    </ListItem>
-
-                    <ListItem>
-                    <Button variant="text">
-
-                      <ListItemIcon>
-                        <MailIcon className="sideBar-Icon"/>
-                      </ListItemIcon>
-                      <ListItemText
-                        primary="Messages" className="sideBar-Icon"
-                      />
-                      </Button>
-                    </ListItem>
 
                     <ListItem>
                     <Button variant="text">
                       <ListItemIcon>
-                        <SearchIcon className="sideBar-Icon"/>
+                        <PersonIcon className="sideBar-Icon"/>
                       </ListItemIcon>
                       <ListItemText
-                        primary="Search" className="sideBar-Icon"
+                        primary="Users" className="sideBar-Icon"
                       />
                       </Button>
                     </ListItem>

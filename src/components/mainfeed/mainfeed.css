@@ -7,6 +7,7 @@
 .addPost {
     width:25%;
     margin-top: 1rem !important;
+    
 }
 .userpost {
     display:flex;
@@ -19,14 +20,7 @@
     margin: 2.5rem 0rem;
 }
 
-.pfp-img-container {
-    display: flex;
-    justify-content: center;
-    margin-top: 3rem;
-    width: 10%;
-    height: 100%;
 
-}
 .pfp-img-container img {
     width: 100%;
 }
@@ -63,7 +57,6 @@
 .post-btns {
     display: flex;
     flex-direction: row;
-    justify-content: space-around;
 }
 .post-btn {
     color:#343a40;
@@ -75,8 +68,7 @@
 
 .usernameTag {
     color:grey;
-    font-size: .9rem;
-    padding-top:3px ;
+    padding-top:2rem ;
 }
 .like-icon {
     position: relative;

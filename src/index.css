@@ -73,3 +73,21 @@ Button { /* MATERIAL UI BUTTON tag */
   cursor: pointer;
   color: White;
 } 
+
+.pfp-img-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 3rem;
+  width: 10%;
+  height: 100%;
+
+}
+
+.pfp-img-container img {
+  width: 100%;
+}
+
+.alertBox {
+  display: absolute;
+  top:0;
+}

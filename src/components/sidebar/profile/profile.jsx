@@ -17,19 +17,19 @@ import RepeatOneIcon from '@mui/icons-material/RepeatOne';
 const Profile = () => {
     const location = useLocation();
     const userData = location.state.user; 
-   
+    
+    
 
     const [posts, setPosts] = useState([]);
-
-
     useEffect(() => {
-      // Fetch posts when the component mounts
-      const fetchData = async () => {
-        const postsData = await fetchPosts();
-        setPosts(postsData);
-      };
+      // // Fetch posts when the component mounts
+      // const fetchData = async () => {
+      //   const postsData = await fetchPosts();
+      //   setPosts(postsData);
+      // };
   
-      fetchData();
+      // fetchData();
+      fetchPosts();
     }, []);
   
     
@@ -52,12 +52,9 @@ const Profile = () => {
             id: doc.id, 
             ...doc.data(), 
           };
-  
           postsData.push(post);
-          console.log(post);
-          console.log(post);
                 });
-    
+        setPosts(postsData);
         return postsData;
       } catch (error) {
         console.error("Error fetching posts:", error);
@@ -85,7 +82,6 @@ const Profile = () => {
                     <div className="profile-details">
                         <div className="profile-user-tags">
                             <h2 className="profile-name">{userData.username}</h2>
-                            <h4 className="profile-username">@{userData.username}</h4>
                             <p className="profile-bio">
                                     Hi I like to play sports and workout.
                                     My IG is @BabyChan
@@ -108,20 +104,13 @@ const Profile = () => {
                         </div>
                         <div className="mainpost">
                           <div className="upperpost">
-                            <p className="replying-to">Replying to @Elon</p>
                               <div className="usertags">
-                                <p>{post.Username}</p>
-                                <p className="usernameTag">@{post.Username}</p>
+                                <p>@{post.Username}</p>
                               </div>
                           </div>
                           <p className="post-message">{post.Message}</p>
-                          <div className="post-btns">
-                            <Button variant="text"><ForumIcon className="post-btn"/></Button>
-                            <Button variant="text"><ThumbUpIcon className="post-btn"/>
-                            <p className="postLikes">{post.likeCount}</p>
-                          </Button>
-                            <Button variant="text"><RepeatOneIcon className="post-btn"/></Button>
-                          </div>
+                          {/* IN FIRESTORE, REFERENCES SUBCOLLECTIONS OF A SUBCOLLECTION DOESNT EXIST, SO I CAN'T Access UserCollection->postSubCollection->Postlikes&&RepliesSubcollection to show like and replies count*/ }
+                          {/* SO THERE IS NO POINT OF PUTTING A THE POST BUTTONS ON THE PROFILES PAGE */}
                           <hr className="post-separator" /> {/* Add a horizontal line at the bottom of each post */}
                         </div>
                       </div>

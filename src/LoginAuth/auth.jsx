@@ -3,6 +3,7 @@ import { auth, GoogleProvider, db } from "../FB-config/Firebase-config";
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword ,signInWithPopup, updateProfile} from 'firebase/auth'; 
 import {doc, setDoc, getDoc} from 'firebase/firestore'
 
+import { Alert } from "@mui/material";
 import Button from '@mui/material/Button';
 import Paper from '@mui/material/Paper';
 import TextField from '@mui/material/TextField';
@@ -18,8 +19,7 @@ export default function Auth() {
         const [email, setEmail] = useState("");
         const [password, setPassword] = useState("");
         const [notSignedUp, setUserLog] = useState(false);
-        const [loginError, setLoginError] = useState("");
-
+        const [loginError, setLoginError] = useState(false);
         const getUsernameFromDatabase = async (uid) => {
             try {
               const userDocRef = doc(db, 'users', uid);
@@ -78,9 +78,9 @@ export default function Auth() {
                     });
                 
             } catch (error) {
-                setLoginError("Incorrect Login Credentials");
+                setLoginError(true);
                 setTimeout(() => {
-                    setLoginError("");
+                    setLoginError(false);
                 }, 5000); // 5000 milliseconds = 5 seconds
             }
         }
@@ -148,7 +148,16 @@ export default function Auth() {
                 </Paper>
             </div>
 : 
+           
         <div className="Login-Container">
+
+            {loginError ? 
+                <Alert variant="filled" severity="error" className="alertBox"
+                          style={{position: 'absolute', top:'5%', left:'50', fontSize: "1.3rem" }} // Inline styles
+
+                >
+                    The credentials you've entered doesn't match our records
+                </Alert> : <></>}
                         
         <Paper elevation={3} square={false} width="" className="centered-paper">
             <h1>Life Invader 📷</h1>

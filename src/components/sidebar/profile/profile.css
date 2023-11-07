@@ -50,7 +50,10 @@
 .profile-bio {
     margin-top: 1rem;
 }
-
+.user-follow-details {
+    display: flex;
+    gap:1.5rem;
+}
 .profile-details {
     display: flex;
     align-items: center;

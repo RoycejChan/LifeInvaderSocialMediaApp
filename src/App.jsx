@@ -8,6 +8,7 @@ import { UserProvider } from './components/usercontext'; // Import your userProv
 import ViewPost from './components/mainfeed/postLogic/viewPost/viewPost.jsx';
 
 import './App.css'
+import './index.css'
 
 
 function App() {

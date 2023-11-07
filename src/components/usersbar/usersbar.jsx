@@ -46,16 +46,15 @@ const UsersBar = () => {
 
   //when user clicks a profile, change homescreen to that persons profile page
   const viewProfile = async (user) => {
-    console.log(user);
     const docRef = doc(db, "users", user.id);
     const docSnap = await getDoc(docRef);
 
     if (docSnap.exists()) {
-      navigate('/profile', { state: { user } });
-      console.log("Document data:", docSnap.data());
+      navigate('/profile', { state: { user }, });
     } else {
       // docSnap.data() will be undefined in this case
       console.log("No such document!");
+      alert("There was an error viewing this user's profile.")
     }
   }
 
@@ -70,16 +69,16 @@ const UsersBar = () => {
           <div className="post-separator"></div>
               <ul className="suggestedUsers">
               {randomUsers.map((user) => (
-                <>
-                  <div className="randUser" key={user.uid}>
+                <div key={user.uid}>
+                  <div className="randUser" >
                     <div className="randUser-info">
                       <p>{user.username}</p>
                       <p className="randUser-username" onClick={()=>viewProfile(user)}>@{user.username}</p>
                     </div>
-                    <Button variant="text" className="stalk-Randuser">Stalk</Button>
+                    <Button variant="text" className="stalk-Randuser" onClick={()=>viewProfile(user)}>Stalk</Button>
                   </div>
                   <div className="post-separator"></div>
-                </>
+                </div>
               ))}
               </ul>
 
