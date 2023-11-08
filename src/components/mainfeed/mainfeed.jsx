@@ -12,6 +12,7 @@ import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import ThumbUpIcon from "@mui/icons-material/ThumbUp";
 import ForumIcon from "@mui/icons-material/Forum";
+import { Alert } from "@mui/material";
 
 import "./mainfeed.css";
 import "./replyBox.css";
@@ -26,6 +27,10 @@ const MainFeed = () => {
   const [posts, setPosts] = useState([]);
   const [isLiked, setIsLiked] = useState({}); // Individual like state for each post
   const [temporaryLikes, setTemporaryLikes] = useState({}); // Temporary like count changes
+
+
+  const [logMsg, setLogMsg] = useState('');
+  const [displayLog, setLog] = useState(false);
 
   // on page load, fetch posts from db, and display it
   useEffect(() => {
@@ -80,6 +85,14 @@ const MainFeed = () => {
       await addPost(user, newpost).then(() => {
         setNewPost(""); // Clear the new post input field
         setPosts((prevPosts) => [postToAdd, ...prevPosts]);
+
+        setLog(true);
+        setLogMsg("Post made invadable");
+        setTimeout(() => {
+            setLoginError(false);
+            setLoginErrorMsg("");
+        }, 5000);
+
       });
     }
   };
@@ -143,7 +156,11 @@ const calculateTimeAgo = (timestamp) => {
     // MAIN FEED CONTAINER
     <div className="mainfeed">
 
-
+        {displayLog ? 
+                <Alert variant="filled" severity="error" className="alertBox"
+                          style={{position: 'absolute', top:'5%', left:'50', fontSize: "1.3rem" }}>
+                    {logMsg}
+        </Alert> : <></>}
       {/* POST SOMETHING */}
       <div className="userpost">
         <TextField

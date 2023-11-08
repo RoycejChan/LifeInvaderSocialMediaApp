@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { auth, GoogleProvider, db } from "../FB-config/Firebase-config";
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword ,signInWithPopup} from 'firebase/auth'; 
-import {doc, setDoc, getDoc} from 'firebase/firestore'
+import {doc, setDoc, getDoc, getDocs, query, where, collection} from 'firebase/firestore'
 
 import { Alert } from "@mui/material";
 import Button from '@mui/material/Button';
@@ -20,6 +20,7 @@ export default function Auth() {
         const [password, setPassword] = useState("");
         const [notSignedUp, setUserLog] = useState(false);
         const [loginError, setLoginError] = useState(false);
+        const [loginErrorMsg, setLoginErrorMsg] = useState(false);
 
         const getUsernameFromDatabase = async (uid) => {
             try {
@@ -39,27 +40,55 @@ export default function Auth() {
 
           const signUp = async () => {
             try {
-              const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-          
-              // Set the user data in the state
-              const user = {
-                uid: userCredential.user.uid,
-                username: username, 
-              };
-              setUser(user);
-
-              const userDocRef = doc(db, 'users', userCredential.user.uid);
-              await setDoc(userDocRef, {
-                email: userCredential.user.email,
-                username: username,
-              })
-              .catch((error) => {
-                console.error('Error creating user document:', error);
-            });
-            } catch (err) {
-              console.error(err);
+                // Check if the username already exists in the users database
+                const usernameQuery = query(collection(db, 'users'), where('username', '==', username));
+                const usernameQuerySnapshot = await getDocs(usernameQuery);
+        
+                if (usernameQuerySnapshot.size === 0) {
+                    const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+        
+                    const user = {
+                        uid: userCredential.user.uid,
+                        username: username,
+                    };
+                    setUser(user);
+        
+                    const userDocRef = doc(db, 'users', userCredential.user.uid);
+                    await setDoc(userDocRef, {
+                        email: userCredential.user.email,
+                        username: username,
+                    });
+        
+                    // Clear the form inputs after signup
+                    setUsername("");
+                    setEmail("");
+                    setPassword("");
+                } else {
+                    // Username already exists
+                    setLoginError(true);
+                    setLoginErrorMsg("Username is already taken");
+                    setTimeout(() => {
+                        setLoginError(false);
+                        setLoginErrorMsg("");
+                    }, 5000);
+                }
+            } catch (error) {
+                const errorCode = error.code;
+                if (errorCode === 'auth/email-already-in-use') {
+                    // Email is already in use
+                    setLoginError(true);
+                    setLoginErrorMsg("Email is already in use");
+                } else {
+                    // Pass to short
+                    setLoginError(true);
+                    setLoginErrorMsg("You password should be at least 6 characters long");
+                }
+                setTimeout(() => {
+                    setLoginError(false);
+                    setLoginErrorMsg("");
+                }, 5000);
             }
-          };
+        };
     
 
         const signIn = async () => {
@@ -76,8 +105,10 @@ export default function Auth() {
                 
             } catch (error) {
                 setLoginError(true);
+                setLoginErrorMsg("Wrong username or password")
                 setTimeout(() => {
                     setLoginError(false);
+                    setLoginErrorMsg("")
                 }, 5000); // 5000 milliseconds = 5 seconds
             }
         }
@@ -99,7 +130,11 @@ export default function Auth() {
         {notSignedUp ?   
         
             <div className="Login-Container">
-                
+                 {loginError ? 
+                <Alert variant="filled" severity="error" className="alertBox"
+                          style={{position: 'absolute', top:'5%', left:'50', fontSize: "1.3rem" }}>
+                    {loginErrorMsg}
+                </Alert> : <></>}
                 <Paper elevation={3} square={false} className="centered-paper">
                     <h1>Life Invader 📷</h1>
                     <h1 className="signUp-header">Sign Up</h1>
@@ -149,7 +184,7 @@ export default function Auth() {
             {loginError ? 
                 <Alert variant="filled" severity="error" className="alertBox"
                           style={{position: 'absolute', top:'5%', left:'50', fontSize: "1.3rem" }}>
-                    The credentials you've entered doesn't match our records
+                    {loginErrorMsg}
                 </Alert> : <></>}
                         
         <Paper elevation={3} square={false} width="" className="centered-paper">
