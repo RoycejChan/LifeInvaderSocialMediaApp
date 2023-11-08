@@ -2,22 +2,11 @@ TODO: PROFILE SECTION :
             ADD NAV BELOW PROFILE HEADER, POSTS AND REPLIES tab, 
             make edit profile btn function to edit bio n stuff
 
-    Add functionality to buttons
-            make subcollections comments, liked, and reposts for each post
-            if length > 1 make red, or display amount on top right of icon
+//ALERT BOX ON LOGIN ERROR and conform delete
+/ON SIGN UP, fetch bad words dictionary n make sure its not on there???    
+//TIME AGO EACH POST
 
-        DELETE like when user clicks again
-        
-ADD BATCH WRITES FIRESTORE
-USE transaction firestore for batching crud
+fix like -1 on click from 0 in viewpost, not mainfeed
 
-ADD WORD LIMIT TO REPLY and show on ui
-
-make like limit 1 per user
-
-SHOW REPLIES on show replies buttton?
-
-FIXME: CANT REFERENCE NESTED SUB COLLECTIONS IN FIREBASE, = cant acces users->posts->likes to reference it on the individual users profile.
-
-//ALERT BOX ON LOGIN ERROR
-/ON SIGN UP, fetch bad words dictionary n make sure its not on there
+work on useresbar
+fix querysnapshot in viewpost fetching post 

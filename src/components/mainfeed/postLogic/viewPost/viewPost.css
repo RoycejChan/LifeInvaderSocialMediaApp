@@ -22,17 +22,19 @@
     align-items: center;
 }
 
-.viewPost-btns {
-    padding:.5rem 0rem;
-}
 
 .userreply {
     display: flex;
     flex-direction: column;
     gap: .5rem;
+    overflow-y: hidden;
+}
+.userreply-footer {
+    display: flex;
+    
 }
 .addComment {
-    background-color: navy;
+    background-color: #1976d2;
     color:white;
     padding:1em;
     width: 140px;
@@ -40,3 +42,23 @@
     margin-left: auto;
 }
 
+.profile-container {
+    overflow-y: hidden;
+}
+
+.viewPost-original-msg {
+    overflow-y: hidden;
+}
+.viewPost-btns {
+    padding:.5rem 0rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+
+.left-viewPost {
+    display: flex;
+    align-items: center;
+    gap:1rem;
+}

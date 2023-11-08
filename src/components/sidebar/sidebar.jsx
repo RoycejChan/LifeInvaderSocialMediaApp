@@ -5,21 +5,15 @@ import { auth } from "../../FB-config/Firebase-config";
 import { signOut } from "firebase/auth";
 import { useUser } from "../usercontext";
 
-import Auth from "../../LoginAuth/auth";
 import './sidebar.css'
-import Profile from "./profile/profile";
 
 import Button from '@mui/material/Button';
-import BugReportIcon from '@mui/icons-material/BugReport';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import HomeIcon from '@mui/icons-material/Home';
 import PersonIcon from '@mui/icons-material/Person';
-import NotificationsIcon from '@mui/icons-material/Notifications';
-import SearchIcon from '@mui/icons-material/Search';
-import MailIcon from '@mui/icons-material/Mail';
 import LogoutIcon from '@mui/icons-material/Logout';
 
 
@@ -30,11 +24,13 @@ const SideBar = () => {
   const navigate = useNavigate();
   
 
+//Navigates to profile page component with the user thats clicked on data
 const toProfile = () => {
   navigate('/profile', { state: { user } });
 
 }
 
+//logs out
 const logout = () => {
   signOut(auth).then(()=> {
     setUser(null)

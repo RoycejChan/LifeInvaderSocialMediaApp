@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from "react"
-import { db } from "../../FB-config/Firebase-config.js" 
-import { collection, doc, getDocs, getDoc } from 'firebase/firestore';
-
 import { useNavigate } from "react-router-dom";
 
+import { db } from "../../FB-config/Firebase-config.js" 
+import { collection, doc, getDocs, getDoc } from 'firebase/firestore';
 
 import Button from '@mui/material/Button';
 
@@ -13,6 +12,8 @@ const UsersBar = () => {
   const navigate = useNavigate();
   const [randomUsers, setRandomUsers] = useState([]); 
 
+
+  //5 RANDOM USERS TO DISPLAY IN 'suggested users to follow side bar'
   const getRandomUsers = async (db, collectionName, numUsers) => {
     try {
       const collectionRef = collection(db, collectionName);
@@ -29,7 +30,6 @@ const UsersBar = () => {
         [users[i], users[j]] = [users[j], users[i]];
       }
   
-      // Get the first 'numUsers' randomized users
       const randomUsers = users.slice(0, numUsers);
       setRandomUsers(randomUsers);
     } catch (error) {
@@ -39,20 +39,21 @@ const UsersBar = () => {
   };
   
   useEffect(() => {
-    // Use useEffect to fetch random users when the component mounts for suggested useres bar
     getRandomUsers(db, "users", 5);
   }, []);
 
 
-  //when user clicks a profile, change homescreen to that persons profile page
-  const viewProfile = async (user) => {
-    const docRef = doc(db, "users", user.id);
+  const viewProfile = async (viewUser) => {
+    const docRef = doc(db, "users", viewUser.id);
     const docSnap = await getDoc(docRef);
-
+    const user = {
+      email: viewUser.email,
+      uid: viewUser.id,
+      username: viewUser.username
+    }
     if (docSnap.exists()) {
       navigate('/profile', { state: { user }, });
     } else {
-      // docSnap.data() will be undefined in this case
       console.log("No such document!");
       alert("There was an error viewing this user's profile.")
     }
@@ -69,8 +70,8 @@ const UsersBar = () => {
           <div className="post-separator"></div>
               <ul className="suggestedUsers">
               {randomUsers.map((user) => (
-                <div key={user.uid}>
-                  <div className="randUser" >
+                <>
+                  <div className="randUser" key={user.uid}>
                     <div className="randUser-info">
                       <p>{user.username}</p>
                       <p className="randUser-username" onClick={()=>viewProfile(user)}>@{user.username}</p>
@@ -78,7 +79,7 @@ const UsersBar = () => {
                     <Button variant="text" className="stalk-Randuser" onClick={()=>viewProfile(user)}>Stalk</Button>
                   </div>
                   <div className="post-separator"></div>
-                </div>
+                </>
               ))}
               </ul>
 

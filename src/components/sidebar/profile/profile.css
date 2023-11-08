@@ -1,4 +1,7 @@
 .profile-container {
+    position:absolute;
+    left: 30%;
+    top:5%;
     width: 27%;
     padding:3rem;
     background-color: #15181c !important;
@@ -10,25 +13,37 @@
     display: flex;
     justify-content: space-around;
     align-items: center;
+    flex-direction: column;
 }
 
-.back-to-home-page {
-    flex-grow: 1;
+.profile-nav {
+    display: flex;
+    margin-top: 1rem;
+    margin-bottom: -2rem;
+    border-bottom: 1px solid #282e33f5;
+
 }
 
+.feedChange {
+    flex:1;
+}
 .profile-header-username {
     font-weight: 800;
 
 }
 .profile-header-details {
     display: flex;
-    flex-direction: column;
-    flex-grow: 8;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
 }
-
 .profile-postAmount {
     margin-top: -1rem ;
 
+}
+.profile-header-tags {
+    display: flex;
+    flex-direction: column;
 }
 .editProfile {
     height: 0%;
@@ -42,10 +57,6 @@
 
 .profile-user-tags > * {
     margin: 0.3rem; /* Adjust the margin on individual elements */
-}
-.profile-username {
-}
-.profile-name {
 }
 .profile-bio {
     margin-top: 1rem;

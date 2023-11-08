@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { auth, GoogleProvider, db } from "../FB-config/Firebase-config";
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword ,signInWithPopup, updateProfile} from 'firebase/auth'; 
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword ,signInWithPopup} from 'firebase/auth'; 
 import {doc, setDoc, getDoc} from 'firebase/firestore'
 
 import { Alert } from "@mui/material";
@@ -9,7 +9,7 @@ import Paper from '@mui/material/Paper';
 import TextField from '@mui/material/TextField';
 
 import Homepage from "../components/homepage"
-import { useUser } from "../components/usercontext"; //userContext
+import { useUser } from "../components/usercontext"; 
 
 
 export default function Auth() { 
@@ -20,6 +20,7 @@ export default function Auth() {
         const [password, setPassword] = useState("");
         const [notSignedUp, setUserLog] = useState(false);
         const [loginError, setLoginError] = useState(false);
+
         const getUsernameFromDatabase = async (uid) => {
             try {
               const userDocRef = doc(db, 'users', uid);
@@ -43,7 +44,7 @@ export default function Auth() {
               // Set the user data in the state
               const user = {
                 uid: userCredential.user.uid,
-                username: username, // Assuming you have a `username` variable
+                username: username, 
               };
               setUser(user);
 
@@ -61,16 +62,12 @@ export default function Auth() {
           };
     
 
-
-
         const signIn = async () => {
                 try {
                 const userCredential = await signInWithEmailAndPassword(auth, email, password);
                
-                 // Retrieve the username from firestore to include with signIN
                     const username = await getUsernameFromDatabase(userCredential.user.uid);
 
-                     // Set the user data in the state
                      setUser({
                         uid: userCredential.user.uid,
                         email: userCredential.user.email,
@@ -99,8 +96,6 @@ export default function Auth() {
 
     return ( 
         <>
-
-
         {notSignedUp ?   
         
             <div className="Login-Container">
@@ -153,15 +148,12 @@ export default function Auth() {
 
             {loginError ? 
                 <Alert variant="filled" severity="error" className="alertBox"
-                          style={{position: 'absolute', top:'5%', left:'50', fontSize: "1.3rem" }} // Inline styles
-
-                >
+                          style={{position: 'absolute', top:'5%', left:'50', fontSize: "1.3rem" }}>
                     The credentials you've entered doesn't match our records
                 </Alert> : <></>}
                         
         <Paper elevation={3} square={false} width="" className="centered-paper">
             <h1>Life Invader 📷</h1>
-
             <h1 className="signUp-header">Log In</h1>
             
             <TextField 

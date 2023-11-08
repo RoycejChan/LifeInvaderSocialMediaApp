@@ -1,33 +1,18 @@
 import { db} from "../../../FB-config/Firebase-config";
 import { collection, addDoc, doc } from "firebase/firestore";
 
-import { useState } from "react";
-
-
-export const sendaReply = async (post, user, msg) => {
-
-  console.log("yes");
-
-  const [currentFormattedDate, setCurrentDate] = useState("");
-const currentDate = new Date();
-      const month = currentDate.getMonth() + 1; // Months are zero based? like array
-        const day = currentDate.getDate();
-        const hours = currentDate.getHours();
-        const minutes = currentDate.getMinutes();
-        setCurrentDate(`${month}/${day}/${year} ${hours}:${minutes}`); 
+export const sendaReply = async (post, user, msg, date) => {
 
     try {
-
-
       const postRef = doc(db, 'posts', post.id);
     
-    // Step 2: Get a reference to the 'likes' subcollection of that post
-    const repliesCollectionRef = collection(postRef, 'replies');
+      const repliesCollectionRef = collection(postRef, 'replies');
 
     await addDoc(repliesCollectionRef, {
+      User: user,
       Username:user.username,
       Message:msg,
-      Date: currentFormattedDate
+      Date: date
     });
 
     const userDocRef = doc(db, 'users', user.uid);
@@ -35,9 +20,10 @@ const currentDate = new Date();
     const userPostsCollectionRef = collection(userDocRef, 'replies');
     
     await addDoc(userPostsCollectionRef, {
+        User: user,
         post,
         Message: msg,
-        Date: currentFormattedDate
+        Date: date
     });
     
 

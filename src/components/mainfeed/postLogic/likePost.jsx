@@ -1,4 +1,4 @@
-import { doc, collection, getDocs, addDoc, deleteDoc, setDoc, query, where } from "firebase/firestore";
+import { doc, collection, getDocs, addDoc, deleteDoc, query, where } from "firebase/firestore";
 import { db } from "../../../FB-config/Firebase-config";
 
 export const likePost = async (post, user) => {

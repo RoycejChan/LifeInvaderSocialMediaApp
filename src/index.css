@@ -4,7 +4,7 @@ html, body {
     box-sizing: border-box;
     background-color: black;
     color:white;
-    font-family: 'Roboto Mono';
+    font-family: 'Playpen Sans';
 
   }
   :root {
@@ -62,16 +62,18 @@ li, ul {
   margin-top: 1rem; 
 }
 
-.homepage {
-  display:flex;
+/* .homepage { */
+  /* display:flex;
   justify-content: center;
   gap:5rem;
-  margin-top: 3rem;
-}
+  margin-top: 3rem; */
+/* } */
 
 Button { /* MATERIAL UI BUTTON tag */
   cursor: pointer;
   color: White;
+  font-family: 'Playpen Sans';
+
 } 
 
 .pfp-img-container {

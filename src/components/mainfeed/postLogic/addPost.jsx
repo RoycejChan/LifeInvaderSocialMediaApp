@@ -13,10 +13,12 @@ export const addPost = async (user, message) => {
     Username: user.username,
     Message: message,
     Date: currentDate,
-    userId: user.uid
+    userId: user.uid,
+    User: user
   });
 
-  //1. reference the user db, 2. refernce the user's post subcollection, then add to post subcollection.
+  // Add the post to the user's post that posted itcollection
+
   const userDocRef = doc(db, 'users', user.uid);
   const userPostsCollectionRef = collection(userDocRef, 'posts');
 
@@ -24,7 +26,8 @@ export const addPost = async (user, message) => {
     Username: user.username,
     Message: message,
     Date: currentDate,
-    userId: user.uid
+    userId: user.uid,
+    User: user
   });
 
     } catch (error) {

@@ -1,4 +1,7 @@
 .usersbar {
+    position: fixed;
+    right:18%;
+    top:5%;
     width: 15%;
     background-color: #15181c;
     border-radius: 3%;

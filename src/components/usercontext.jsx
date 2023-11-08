@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useState } from 'react';
 
 const UserContext = createContext();
-
+//ALl components can acces the current local user
 export const useUser = () => useContext(UserContext);
 
 export const UserProvider = ({ children }) => {
