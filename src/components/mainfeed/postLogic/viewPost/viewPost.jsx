@@ -7,7 +7,7 @@ import profilePFP from "../../../../assets/defaultpfp.png";
 import { sendaReply } from "../replyPost.jsx";
 
 import { db } from "../../../../FB-config/Firebase-config.js";
-import { doc, collection, getDoc, query, deleteDoc } from "firebase/firestore";
+import { doc, collection, getDoc, query, deleteDoc, getDocs } from "firebase/firestore";
 
 import "./viewPost.css";
 
@@ -25,18 +25,13 @@ const ViewPost = () => {
     const location = useLocation();
     const user = location.state.user;
     const post = location.state.post;
-
-
-
-
-    
-
+    console.log(post);
+    console.log(user);    
     const [OP, setOP] = useState(false);
 
     const [currentPost, setPost] = useState({});
     const [postReplies, setPostReplies] = useState([]);
     const [userReply, setUserReply] = useState("");
-    
     const [currentFormattedDate, setCurrentDate] = useState("");
     const currentDate = new Date();
     const month = currentDate.getMonth() + 1;
@@ -51,6 +46,7 @@ const ViewPost = () => {
     
     const addNewReply = async () => {
         try {
+            
             const replyData = {
                 User: user,
                 Username: user.username,
@@ -58,14 +54,19 @@ const ViewPost = () => {
                 Date: currentFormattedDate,
             };
 
+            // Clear the userReply state
+            setUserReply("");
+
             // Add the reply to the db
-            await sendaReply(post, user, userReply, currentFormattedDate);
+            await sendaReply(post, user, userReply, currentFormattedDate)
+            .then(()=>{  
+                setUserReply("")
+                console.log("Nice");
+        });
 
             // Update the UI by adding the new reply to the postReplies state
             setPostReplies((prevReplies) => [...prevReplies, replyData]);
 
-            // Clear the userReply state
-            setUserReply("");
 
         } catch (error) {
             console.error("Error adding a reply:", error);
@@ -73,42 +74,49 @@ const ViewPost = () => {
     };
 
     useEffect(() => {
-        fetchPosts();
+        fetchReplies();
         setCurrentDate(`${month}/${day} ${hours}:${minutes}`);
         if (user.uid == post.userId) {
             setOP(true);
         }
     }, []);
 
-    const fetchPosts = async () => {
+    const fetchReplies = async () => {
         try {
-            const postDocRef = doc(db, 'posts', post.id);
-            setPost(postDocRef);
-            const postDataCollectionRef = collection(postDocRef, 'replies');
-            const querySnapshot = query(postDataCollectionRef); 
-            const postReplies = [];
-            querySnapshot.forEach((doc) => {
-                const post = {
-                    id: doc.id,
-                    ...doc.data()
-                };
-                postReplies.push(post);
-            });
-            setPostReplies(postReplies);
+          //reference the persons posts
+          const postDocRef = doc(db, 'posts', post.id);
+          const repliesCollectionRef = collection(postDocRef, 'replies');
+  
+          const querySnapshotreplies = await getDocs(repliesCollectionRef); 
+          const repliesData = [];
+          querySnapshotreplies.forEach((doc) => {
+            const reply = {
+              id: doc.id, 
+              ...doc.data(), 
+            };
+            repliesData.push(reply);
+                  });
+          setPostReplies(repliesData);
+          return repliesData;
         } catch (error) {
-            console.error("Error fetching posts:", error);
+          console.error("Error fetching replies:", error);
+          return [];
+        }
+      };
+
+      const likeaPost = async (post) => {
+        const likeState = await likePost(post, user);
+    
+        if (likeState) {
+            // If the post is liked, increase the like count and set isLiked to true to make icon red
+            setTemporaryLikes((prevLikes) => prevLikes + 1);
+            setIsLiked(true);
+        } else {
+            // If the post is unliked, decrease the like count and set isLiked to false to make icon go back to original color
+            setTemporaryLikes((prevLikes) => prevLikes - 1);
+            setIsLiked(false);
         }
     };
-
-    const likeaPost = async (post) => {
-        const likeState = await likePost(post, user);
-        setIsLiked(likeState);
-
-        
-        // Temporary like count changes (increment or decrement)
-        setTemporaryLikes((prevLikes) => likeState ? prevLikes + 1 : prevLikes - 1);
-    };
-
 
     const viewProfile = async (replyUser) => {
         const docRef = doc(db, "users", replyUser.User.uid);
@@ -140,7 +148,7 @@ const ViewPost = () => {
                         <img src={profilePFP} alt="PFP" />
                     </div>
                     <div className="usertags">
-                        <h4>{post.Username}</h4>
+                        <h4>  {post.Username}</h4>
                     </div>
                 </div>
                 <TextField
@@ -159,7 +167,7 @@ const ViewPost = () => {
                 <div className="viewPost-btns">
                     <div className="left-viewPost">
                     <Button variant="text" onClick={() => likeaPost(post)}>
-                        <ThumbUpIcon className="post-btn like-icon" style={isLiked ? { color: "red" } : {}} />
+                        <ThumbUpIcon className="post-btn like-icon" style={isLiked ? { color: "darkred" } : {}} />
                         <p className="postLikes">{post.likes + temporaryLikes}</p>
                     </Button>
                     <ForumIcon className="post-btn viewPost-comment-btn"/>
@@ -175,6 +183,7 @@ const ViewPost = () => {
                     label="Write Comment ..."
                     multiline
                     maxRows={2}
+                    value={userReply}
                     placeholder={`What do you have to say about this post ${user.username}`}
                     variant="standard"
                     onChange={(e) => setUserReply(e.target.value)}

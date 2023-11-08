@@ -70,8 +70,8 @@ const UsersBar = () => {
           <div className="post-separator"></div>
               <ul className="suggestedUsers">
               {randomUsers.map((user) => (
-                <>
-                  <div className="randUser" key={user.uid}>
+                <li  key={user.uid}>
+                  <div className="randUser">
                     <div className="randUser-info">
                       <p>{user.username}</p>
                       <p className="randUser-username" onClick={()=>viewProfile(user)}>@{user.username}</p>
@@ -79,7 +79,7 @@ const UsersBar = () => {
                     <Button variant="text" className="stalk-Randuser" onClick={()=>viewProfile(user)}>Stalk</Button>
                   </div>
                   <div className="post-separator"></div>
-                </>
+                </li>
               ))}
               </ul>
 

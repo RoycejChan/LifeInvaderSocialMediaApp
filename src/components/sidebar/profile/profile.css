@@ -81,3 +81,12 @@
     width: 100%;
     height: 100%;
 }
+
+.usertags{
+    display: flex;
+    flex-direction: column;
+}
+.usertags:before{
+    margin-top: -10px;
+
+}

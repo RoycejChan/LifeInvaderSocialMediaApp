@@ -48,7 +48,6 @@
 .usertags {
     display: flex;
     flex-direction: row;
-    gap:1rem;
 }
 .upperpost p {
     height: 0px;

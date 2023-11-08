@@ -40,7 +40,7 @@ const MainFeed = () => {
       // Reverse the order to display most recent on top
       const reversedPosts = sortedPosts.reverse();
       setPosts(reversedPosts);
-  
+      
       // Initialize like state for each post to false
       const initialLikeState = {};
       reversedPosts.forEach((post) => {
@@ -85,7 +85,6 @@ const MainFeed = () => {
   };
 
   const likeaPost = async (post) => {
-    // Clone the current like state to avoid modifying the state directly
     const updatedLikeState = { ...isLiked };
     const likeState = await likePost(post, user);
     updatedLikeState[post.id] = likeState;
@@ -109,7 +108,6 @@ const MainFeed = () => {
     navigate("/viewPost", { state: { post, user } });
   };
 
-  
   const viewProfile = async (postuser) => {
     const docRef = doc(db, "users", postuser.userId);
     const docSnap = await getDoc(docRef);
@@ -122,7 +120,25 @@ const MainFeed = () => {
     }
 };
 
+const calculateTimeAgo = (timestamp) => {
+  const now = new Date();
+  const postDate = timestamp.toDate(); // Convert Firestore timestamp to Date object
 
+  const secondsAgo = Math.floor((now - postDate) / 1000);
+
+  if (secondsAgo < 60) {
+    return `${secondsAgo} seconds ago`;
+  } else if (secondsAgo < 3600) {
+    const minutesAgo = Math.floor(secondsAgo / 60);
+    return `${minutesAgo} ${minutesAgo === 1 ? 'minute' : 'minutes'} ago`;
+  } else if (secondsAgo < 86400) {
+    const hoursAgo = Math.floor(secondsAgo / 3600);
+    return `${hoursAgo} ${hoursAgo === 1 ? 'hour' : 'hours'} ago`;
+  } else {
+    const daysAgo = Math.floor(secondsAgo / 86400);
+    return `${daysAgo} ${daysAgo === 1 ? 'day' : 'days'} ago`;
+  }
+};
   return (
     // MAIN FEED CONTAINER
     <div className="mainfeed">
@@ -134,6 +150,7 @@ const MainFeed = () => {
           id="filled-multiline-static"
           label="Post something ..."
           color="secondary"
+          value={newpost}
           multiline
           maxRows={4}
           placeholder={`What's on your mind ${user.username}`}
@@ -152,7 +169,7 @@ const MainFeed = () => {
         >
           Invade
         </Button>
-        <p>{newpost.length}/400</p>
+        <p onClick={()=>{console.log(posts)}}>{newpost.length}/400</p>
         </div>
       </div>
 
@@ -163,12 +180,13 @@ const MainFeed = () => {
           {posts.map((post) => (
             <div key={post.id} className="apost">
               <div className="pfp-img-container">
-                <img src={pfp} alt="PFP" />
+                <img src={pfp} alt="PFP" onClick={()=>{calculateTimeAgo(post.Date)}}/>
               </div>
               <div className="mainpost">
                 <div className="upperpost">
                   <div className="usertags">
                     <h3 className="usernameTag" onClick={() => viewProfile(post)}>@{post.Username}</h3>
+                    <p>{calculateTimeAgo(post.Date)}</p>
                   </div>
                 </div>
                 <p className="post-message" onClick={() => navToPost(post)}>
@@ -182,7 +200,7 @@ const MainFeed = () => {
                   <Button variant="text" onClick={() => likeaPost(post)}>
                     <ThumbUpIcon
                       className="post-btn like-icon"
-                      style={isLiked[post.id] ? { color: "red" } : {}}
+                      style={isLiked[post.id] ? { color: "darkred" } : {}}
                     />
                     <p className="postLikes">
                       {post.likes + (temporaryLikes[post.id] || 0)}

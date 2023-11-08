@@ -1,12 +1,18 @@
 TODO: PROFILE SECTION :
-            ADD NAV BELOW PROFILE HEADER, POSTS AND REPLIES tab, 
             make edit profile btn function to edit bio n stuff
 
 //ALERT BOX ON LOGIN ERROR and conform delete
+
 /ON SIGN UP, fetch bad words dictionary n make sure its not on there???    
+//favicon emoji
+//make functions reusable
+
+DONE
+delete input after posting or replying
+shows posts count of each user, can see replies of a user and who theyre replying to
 //TIME AGO EACH POST
+fix like -1 on click from 0 in viewpost, not mainfeed, and change color back to original when unliked
 
-fix like -1 on click from 0 in viewpost, not mainfeed
-
-work on useresbar
-fix querysnapshot in viewpost fetching post 
+MAIN PROBLEM
+//on profile tab, post id is different than mainfeed post id, so viewpost function cant find it RIP, data inconsistency
+things i wish i couldve done better, consistent data, user.id and user.uid confusing, i was organized, put reusable functions in their own file.
