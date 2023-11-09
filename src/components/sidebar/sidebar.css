@@ -1,8 +1,8 @@
 .Sidebar {
     position: fixed;
-    left: 13%;
+    left: 330px;
     top:5%;
-    width:15%;
+    width:300px;
     display:flex;
     justify-content: center;
     height: 250px;

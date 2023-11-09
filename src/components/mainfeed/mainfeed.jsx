@@ -13,10 +13,21 @@ import Button from "@mui/material/Button";
 import ThumbUpIcon from "@mui/icons-material/ThumbUp";
 import ForumIcon from "@mui/icons-material/Forum";
 import { Alert } from "@mui/material";
+import BottomNavigation from '@mui/material/BottomNavigation';
+import BottomNavigationAction from '@mui/material/BottomNavigationAction';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import ListItemText from '@mui/material/ListItemText';
+import HomeIcon from '@mui/icons-material/Home';
+import PersonIcon from '@mui/icons-material/Person';
+import LogoutIcon from '@mui/icons-material/Logout';
+import ShuffleIcon from '@mui/icons-material/Shuffle';
 
 import "./mainfeed.css";
 import "./replyBox.css";
 import pfp from "../../assets/defaultpfp.png";
+import { Padding } from "@mui/icons-material";
 
 const MainFeed = () => {
   const { userData, setUser } = useUser();
@@ -89,9 +100,9 @@ const MainFeed = () => {
         setLog(true);
         setLogMsg("Post made invadable");
         setTimeout(() => {
-            setLoginError(false);
-            setLoginErrorMsg("");
-        }, 5000);
+            setLog(false);
+            setLogMsg("");
+        }, 1000);
 
       });
     }
@@ -133,24 +144,28 @@ const MainFeed = () => {
     }
 };
 
-const calculateTimeAgo = (timestamp) => {
-  const now = new Date();
-  const postDate = timestamp.toDate(); // Convert Firestore timestamp to Date object
+// const calculateTimeAgo = (timestamp) => {
+//   const now = new Date();
+//   const postDate = timestamp.toDate(); // Convert Firestore timestamp to Date object
 
-  const secondsAgo = Math.floor((now - postDate) / 1000);
+//   const secondsAgo = Math.floor((now - postDate) / 1000);
 
-  if (secondsAgo < 60) {
-    return `${secondsAgo} seconds ago`;
-  } else if (secondsAgo < 3600) {
-    const minutesAgo = Math.floor(secondsAgo / 60);
-    return `${minutesAgo} ${minutesAgo === 1 ? 'minute' : 'minutes'} ago`;
-  } else if (secondsAgo < 86400) {
-    const hoursAgo = Math.floor(secondsAgo / 3600);
-    return `${hoursAgo} ${hoursAgo === 1 ? 'hour' : 'hours'} ago`;
-  } else {
-    const daysAgo = Math.floor(secondsAgo / 86400);
-    return `${daysAgo} ${daysAgo === 1 ? 'day' : 'days'} ago`;
-  }
+//   if (secondsAgo < 60) {
+//     return `${secondsAgo} seconds ago`;
+//   } else if (secondsAgo < 3600) {
+//     const minutesAgo = Math.floor(secondsAgo / 60);
+//     return `${minutesAgo} ${minutesAgo === 1 ? 'minute' : 'minutes'} ago`;
+//   } else if (secondsAgo < 86400) {
+//     const hoursAgo = Math.floor(secondsAgo / 3600);
+//     return `${hoursAgo} ${hoursAgo === 1 ? 'hour' : 'hours'} ago`;
+//   } else {
+//     const daysAgo = Math.floor(secondsAgo / 86400);
+//     return `${daysAgo} ${daysAgo === 1 ? 'day' : 'days'} ago`;
+//   }
+// };
+const [value, setValue] = useState('recents');
+const handleChange = (event, newValue) => {
+  setValue(newValue);
 };
   return (
     // MAIN FEED CONTAINER
@@ -158,7 +173,7 @@ const calculateTimeAgo = (timestamp) => {
 
         {displayLog ? 
                 <Alert variant="filled" severity="error" className="alertBox"
-                          style={{position: 'absolute', top:'5%', left:'50', fontSize: "1.3rem" }}>
+                          style={{position: 'absolute', top:'0%', left:'40%', fontSize: "1.3rem", zIndex:'999' }}>
                     {logMsg}
         </Alert> : <></>}
       {/* POST SOMETHING */}
@@ -174,6 +189,7 @@ const calculateTimeAgo = (timestamp) => {
           variant="standard"
           onChange={(e) => setNewPost(e.target.value)}
           inputProps={{ style: { color: "white", padding: ".5rem" } , maxLength: 400 } }
+
           InputLabelProps={{ className: "textField_label" } }
           
         />
@@ -196,19 +212,23 @@ const calculateTimeAgo = (timestamp) => {
         <ul>
           {posts.map((post) => (
             <div key={post.id} className="apost">
-              <div className="pfp-img-container">
-                <img src={pfp} alt="PFP" onClick={()=>{calculateTimeAgo(post.Date)}}/>
-              </div>
+          
               <div className="mainpost">
+       
                 <div className="upperpost">
+                <div className="pfp-img-container">
+                <img src={pfp} alt="PFP" />
+              </div>
                   <div className="usertags">
                     <h3 className="usernameTag" onClick={() => viewProfile(post)}>@{post.Username}</h3>
-                    <p>{calculateTimeAgo(post.Date)}</p>
+                    {/* <p>{calculateTimeAgo(post.Date)}</p> */}
                   </div>
                 </div>
-                <p className="post-message" onClick={() => navToPost(post)}>
-                  {post.Message}
-                </p>
+                <div className="post-msg">
+                  <p className="post-message" onClick={() => navToPost(post)}>
+                    {post.Message}
+                  </p>
+                </div>
                 <div className="post-btns">
                   <Button variant="text" onClick={() => navToPost(post, user)}>
                     <ForumIcon className="post-btn" />
@@ -230,6 +250,36 @@ const calculateTimeAgo = (timestamp) => {
           ))}
         </ul>
       </div>
+      {/* sx={{ width: 500 }} */}
+      <BottomNavigation  value={value} onChange={handleChange} className="bottom-nav">
+      <BottomNavigationAction
+        label="Home"
+        value="Home"
+        icon={<HomeIcon fontSize='large'/>}
+      />
+      <BottomNavigationAction
+        label="Profile"
+        value="Profile"
+        icon={<PersonIcon fontSize='large'/>}
+      />
+      <BottomNavigationAction
+        label="Users"
+        value="Users"
+        icon={<PersonIcon fontSize='large'/>}
+      />
+    <BottomNavigationAction
+        label="Random Users"
+        value="Random Users"
+        icon={<ShuffleIcon fontSize='large'/>}
+      />
+    <BottomNavigationAction
+        label="Logout"
+        value="Logout"
+        icon={<LogoutIcon fontSize='large'/>}
+      />
+      
+    </BottomNavigation>
+    
     </div>
   );
 };

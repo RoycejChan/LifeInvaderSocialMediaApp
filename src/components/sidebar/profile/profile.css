@@ -19,7 +19,7 @@
 .profile-nav {
     display: flex;
     margin-top: 1rem;
-    margin-bottom: -2rem;
+    margin-bottom: 2rem;
     border-bottom: 1px solid #282e33f5;
 
 }

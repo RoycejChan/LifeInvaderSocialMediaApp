@@ -1,14 +1,13 @@
-.pfp-img-container {
+.pfp-img-container-post {
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-top: 3rem;
-    width: 10%;
-    height: 100%;
-  }
+    width: 90px ;
+    height: 90px ;
+}
   
-  .pfp-img-container img {
-    width: 100%;
+  .pfp-img-container-post img {
+    width: 100% ;
   }
 
 .originalPost {
@@ -20,6 +19,8 @@
 .originalPostUser {
     display:flex;
     align-items: center;
+    gap:1rem;
+
 }
 
 
@@ -47,7 +48,7 @@
 }
 
 .viewPost-original-msg {
-    overflow-y: hidden;
+    font-size: 2rem;
 }
 .viewPost-btns {
     padding:.5rem 0rem;
@@ -61,4 +62,13 @@
     display: flex;
     align-items: center;
     gap:1rem;
+}
+
+.upperpost {
+    display:flex;
+    align-items: center;
+}
+.usertagspost {
+    display: flex;
+    flex-direction: column;
 }

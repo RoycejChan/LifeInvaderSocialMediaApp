@@ -1,18 +1,23 @@
 TODO: PROFILE SECTION :
 make edit profile btn function to edit bio n stuff
 //make functions reusable
-and conform delete
 //responsive
 //fix timestamp and addingpost interferance
+//add bottom nav bar to homepage.jsx as seperate component
+//fix imagae responsiveness
+//add msg, if user posts is empty, put msg 'its a bit lonely here'
+if reply empty, give error
+//add responsiveness to error logs
+//add bottom nav
 
 DONE
-//favicon emoji
-//check if username already exits then error
-//display signup errors:user or email already taken, password shorter than 6 characters.
+fixed viewPost text area css
+and conform delete
+added responsive ness to login page and homepage, profile page, and  view post page
+
 
 MAIN PROBLEM
 //on profile tab, post id is different than mainfeed post id, so viewpost function cant find it RIP, data inconsistency
 things i wish i couldve done better, consistent data, user.id and user.uid confusing, i was organized, put reusable functions in their own file.
 //on inital load already check, if user refreshes their ui doesnt show they liked a post
-
 

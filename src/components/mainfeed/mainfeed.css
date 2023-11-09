@@ -1,10 +1,10 @@
 .mainfeed {
-    width: 27%;
+    width: 30%;
     padding:3rem;
     background-color: #15181c;
     border-radius: 3%;
     position:absolute;
-    left: 30%;
+    left: 31%;
     top:5%;
 }
 .addPost {
@@ -29,7 +29,9 @@
     margin: 2.5rem 0rem;
 }
 
-
+.pfp-img-container {
+    width: 100%;
+}
 .pfp-img-container img {
     width: 100%;
 }
@@ -42,8 +44,9 @@
 
 .upperpost {
     display: flex;
-    flex-direction:column;
+    align-items: center;
     width: 100%;
+    gap:1rem;
 }
 .usertags {
     display: flex;
@@ -52,7 +55,9 @@
 .upperpost p {
     height: 0px;
 }
-
+.post-msg {
+    width: 100%;
+}
 
 .post-message {
     padding: 1rem;
@@ -78,7 +83,6 @@
 
 .usernameTag {
     color:grey;
-    padding-top:2rem ;
 }
 .like-icon {
     position: relative;
@@ -86,4 +90,75 @@
 .postLikes {
     font-weight: 800;
     margin-left: 10px;
+}
+
+.bottom-nav {
+     background-color: #1f2227 !important;
+     width: 99.9%;
+     position: fixed;
+     bottom: 0;
+     margin-left: -3rem;
+     padding: .3rem;
+}
+
+@media (min-width: 1800px) {
+    .bottom-nav {
+        display: none !important;
+    }
+}
+
+@media (max-width: 2142px) {
+    .Sidebar {
+        left: 110px;
+        top:5%;
+        width:300px;
+        height: 250px;
+    }
+    .usersbar {
+        right:7% !important;
+        top:5%;
+        width: 305px !important;
+        height: 870px;
+        font-size: 1rem;
+    }
+    .suggestedUsers {
+        font-size: 1.2rem !important;
+    }
+    .mainfeed {
+        width: 40% !important;
+        left: 26%;
+        top:5%;
+    }
+}
+
+@media (max-width: 1800px) {
+    html {
+        background-color: #15181c !important;
+    }
+    .Sidebar {
+        display: none;
+    }
+    .usersbar {
+      display: none;
+    }
+    .mainfeed {
+        width: 95% !important;
+        left: 0%;
+        top:0%;
+        border-radius: 0%;
+    }
+    .profile-container {
+        left: 0 !important;
+        top:0% !important;
+        width: 95% !important;
+        border-radius: 0% !important;
+        color:white;
+    }
+    .profile-header-details {
+            display: flex;
+            align-items: center;
+            justify-content: space-between !important;
+            width: 75% !important;
+    }
+    
 }

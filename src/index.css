@@ -79,14 +79,13 @@ Button { /* MATERIAL UI BUTTON tag */
 .pfp-img-container {
   display: flex;
   justify-content: center;
-  margin-top: 3rem;
-  width: 10%;
-  height: 100%;
-
+  width: 90px;
+  height: 80px;
 }
 
 .pfp-img-container img {
-  width: 100%;
+  max-width: 100%;
+  height: auto;
 }
 
 .alertBox {

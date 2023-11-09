@@ -41,3 +41,18 @@
     color: lightblue;
     background: none;
 }
+
+@media (max-width: 1024px) {
+    .centered-paper {
+    width: 1024px;
+    height: 100%;
+    padding: 0;
+    margin: 0;
+    }
+    .login-input, .signUp-btn  {
+        width: 50%;
+    }
+    .alt-signUp-btns-container {
+        justify-content: center;
+    }
+    }

@@ -11,6 +11,7 @@ import { doc, collection, getDoc, query, deleteDoc, getDocs } from "firebase/fir
 
 import "./viewPost.css";
 
+import { Alert } from "@mui/material";
 import SideBar from "../../../sidebar/sidebar.jsx";
 import UsersBar from "../../../usersbar/usersbar.jsx";
 import TextField from '@mui/material/TextField';
@@ -18,15 +19,17 @@ import Button from '@mui/material/Button';
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import ForumIcon from '@mui/icons-material/Forum';
 import DeleteIcon from '@mui/icons-material/Delete';
-
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
 
 const ViewPost = () => {
     const navigate = useNavigate();
     const location = useLocation();
     const user = location.state.user;
     const post = location.state.post;
-    console.log(post);
-    console.log(user);    
     const [OP, setOP] = useState(false);
 
     const [currentPost, setPost] = useState({});
@@ -43,7 +46,10 @@ const ViewPost = () => {
     const [temporaryLikes, setTemporaryLikes] = useState(0); // Temporary like count changes for the main post
 
 
-    
+    const [logMsg, setLogMsg] = useState('');
+    const [displayLog, setLog] = useState(false);
+
+
     const addNewReply = async () => {
         try {
             
@@ -61,7 +67,6 @@ const ViewPost = () => {
             await sendaReply(post, user, userReply, currentFormattedDate)
             .then(()=>{  
                 setUserReply("")
-                console.log("Nice");
         });
 
             // Update the UI by adding the new reply to the postReplies state
@@ -130,10 +135,33 @@ const ViewPost = () => {
         }
     };
 
-    const deletePost = async () => {
+//DELETE POST, displays confirmation popup
+    const [open, setOpen] = useState(false);
+    const confirmDeletePost = () => {
         // const docRef = doc(db, 'posts', post.id )
-        console.log(post)
-        await deleteDoc(doc(db, 'posts', post.id )).then(()=>navigate('/homepage'));
+        setOpen(true);
+    }
+    const deletePost = async () => {
+        try {
+            await deleteDoc(doc(db, 'posts', post.id));
+            setOpen(false);
+            setLogMsg("Post successfully deleted");
+            setLog(true);
+            setTimeout(() => {
+                setLog(false);
+                setLogMsg("");
+                navigate('/homepage');
+            }, 1000);
+        } catch (error) {
+            console.error("Error deleting post:", error);
+            setLogMsg("Error deleting post");
+            setLog(true);
+        }
+    }
+    
+
+    const handleClose = () => {
+        setOpen(false);
     }
 
 
@@ -141,28 +169,53 @@ const ViewPost = () => {
     return (
         <div className="homepage">
         <SideBar/>
+        
         <div className="profile-container">
+            {displayLog ? 
+                    <Alert variant="filled" severity="error" className="alertBox"
+                            style={{position: 'absolute', top:'0%', left:'40%', fontSize: "1.3rem", zIndex:'999' }}>
+                        {logMsg}
+            </Alert> : <></>}
+            <Dialog
+                open={open}
+                onClose={handleClose}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+            >
+                <DialogTitle id="alert-dialog-title">
+                {"Confirm you want to delete this post"}
+                </DialogTitle>
+        
+                <DialogActions>
+                <Button onClick={handleClose}>Cancel</Button>
+                <Button onClick={deletePost} autoFocus>
+                    Delete
+                </Button>
+                </DialogActions>
+            </Dialog>
+
             <div className="originalPost">
                 <div className="originalPostUser">
-                    <div className="pfp-img-container">
+                    <div className="pfp-img-container-post">
                         <img src={profilePFP} alt="PFP" />
                     </div>
-                    <div className="usertags">
-                        <h4>  {post.Username}</h4>
+                    <div>
+                        <h3>  {post.Username}</h3>
                     </div>
                 </div>
                 <TextField
                     // label={post.Message}
+                    spellCheck="false"
                     value={post.Message}
-                    disabled
                     fullWidth
-                    maxRows={4}
                     id="filled-multiline-static"
                     multiline
-                    variant="standard"
+                    variant="filled"
+                    color="none"
                     InputLabelProps={{ className: "textField_label" } }
                     className="viewPost-original-msg"
-
+                    inputProps={{ style: { color: "white", padding: "0rem .5rem .5rem .5rem", fontSize: "1.5rem", backgroundColor:'none' } , maxLength: 400,  } }
+                    focused 
                     />
                 <div className="viewPost-btns">
                     <div className="left-viewPost">
@@ -173,7 +226,7 @@ const ViewPost = () => {
                     <ForumIcon className="post-btn viewPost-comment-btn"/>
                     </div>
 
-                    {OP ? <Button variant="text" onClick={() => {(deletePost())}}><DeleteIcon className="post-btn"/></Button> : <></>}
+                    {OP ? <Button variant="text" onClick={() => {(confirmDeletePost())}}><DeleteIcon className="post-btn"/></Button> : <></>}
                 </div>
             </div>
 
@@ -200,14 +253,15 @@ const ViewPost = () => {
             <ul>
                     {postReplies.map((postReply) => (
             <div key={postReply.id} className="apost">
-                            <div className="pfp-img-container">
-                                <img src={profilePFP} alt="PFP" />
-                            </div>
+                            
                             <div className="mainpost">
                                 <div className="upperpost">
+                                <div className="pfp-img-container">
+                                <img src={profilePFP} alt="PFP" />
+                            </div>
+                                    <div className="usertagspost">
+                                    <p className="usernameTag" onClick={() => viewProfile(postReply)}>@{postReply.Username}</p>
                                     <p className="replying-to">Replying to @{post.Username}</p>
-                                    <div className="usertags">
-                                        <p className="usernameTag" onClick={() => viewProfile(postReply)}>@{postReply.Username}</p>
                                     </div>
                                 </div>
                                 <p className="post-message">{postReply.Message}</p>

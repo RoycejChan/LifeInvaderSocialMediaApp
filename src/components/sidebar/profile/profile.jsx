@@ -159,11 +159,12 @@ const calculateTimeAgo = (timestamp) => {
               <ul>
               {posts.map((post) => (
                       <div key={post.id} className="apost">
-                        <div className="pfp-img-container">
-                          <img src={profilePFP} alt="PFP" />
-                        </div>
+                   
                         <div className="mainpost">
                           <div className="upperpost">
+                          <div className="pfp-img-container">
+                          <img src={profilePFP} alt="PFP" />
+                        </div>
                               <div className="usertags">
                                 <p>@{post.Username}</p>
                                 <p>{calculateTimeAgo(post.Date)}</p>
