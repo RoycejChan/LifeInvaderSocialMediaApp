@@ -90,3 +90,8 @@
     margin-top: -10px;
 
 }
+
+.goback-btn {
+    margin-bottom: -1rem !important;
+    width: 50px;
+}

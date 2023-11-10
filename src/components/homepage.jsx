@@ -4,11 +4,15 @@ import React from "react"
 import SideBar from './sidebar/sidebar'
 import MainFeed from "./mainfeed/mainfeed"
 import UsersBar from "./usersbar/usersbar"
+import "../index.css"
+
 const Homepage = () => {
   return (
     <div className="homepage">
         <SideBar/>
+        <div className="mainFeed-Container">
         <MainFeed/>
+        </div>
         <UsersBar />
     </div>
     )

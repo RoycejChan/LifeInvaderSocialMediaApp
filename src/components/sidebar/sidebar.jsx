@@ -26,6 +26,7 @@ const SideBar = () => {
 
 //Navigates to profile page component with the user thats clicked on data
 const toProfile = () => {
+  console.log("bruh")
   navigate('/profile', { state: { user } });
 
 }

@@ -1,19 +1,19 @@
 TODO: PROFILE SECTION :
 make edit profile btn function to edit bio n stuff
 //make functions reusable
-//responsive
 //fix timestamp and addingpost interferance
 //add bottom nav bar to homepage.jsx as seperate component
 //fix imagae responsiveness
-//add msg, if user posts is empty, put msg 'its a bit lonely here'
-if reply empty, give error
 //add responsiveness to error logs
 //add bottom nav
 
+
+
 DONE
-fixed viewPost text area css
-and conform delete
-added responsive ness to login page and homepage, profile page, and  view post page
+    post and reply no longer gives alert, button is initially disabled until user enters > 3 letters
+    //add msg, if user posts is empty, put msg 'its a bit lonely here'
+    //add back button to home when on post, and back button to post when clicked on profile from post
+
 
 
 MAIN PROBLEM
@@ -21,3 +21,4 @@ MAIN PROBLEM
 things i wish i couldve done better, consistent data, user.id and user.uid confusing, i was organized, put reusable functions in their own file.
 //on inital load already check, if user refreshes their ui doesnt show they liked a post
 
+//padding distrupts bottom nav and main feed

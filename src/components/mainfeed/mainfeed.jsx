@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { useUser } from "../usercontext.jsx";
 import { getPosts } from "./postLogic/getPosts.jsx";
 import { addPost } from "./postLogic/addPost.jsx";
@@ -42,11 +42,21 @@ const MainFeed = () => {
 
   const [logMsg, setLogMsg] = useState('');
   const [displayLog, setLog] = useState(false);
-
+  const [isDisabled, setIsDisabled] = useState(true);
   // on page load, fetch posts from db, and display it
   useEffect(() => {
     fetchPosts();
   }, []);
+
+  useEffect(() => {
+    // Check the length of newpost to enable/disable the input
+    if (newpost.length > 3) {
+        setIsDisabled(false);
+    } else {
+        setIsDisabled(true);
+    }
+}, [newpost]);
+
 
   const fetchPosts = async () => {
     try {
@@ -133,16 +143,17 @@ const MainFeed = () => {
   };
 
   const viewProfile = async (postuser) => {
-    const docRef = doc(db, "users", postuser.userId);
-    const docSnap = await getDoc(docRef);
-    if (docSnap.exists()) {
         let user = postuser.User;
         navigate('/profile', { state: { user } });
-    } else {
-        console.log("No such document!");
-        alert("There was an error viewing this user's profile.");
-    }
-};
+  }
+const logout = () => {
+  signOut(auth).then(()=> {
+    setUser(null)
+    navigate('/');
+  }).catch((err) => {
+    console.log(err);
+  })
+}
 
 // const calculateTimeAgo = (timestamp) => {
 //   const now = new Date();
@@ -189,16 +200,15 @@ const handleChange = (event, newValue) => {
           variant="standard"
           onChange={(e) => setNewPost(e.target.value)}
           inputProps={{ style: { color: "white", padding: ".5rem" } , maxLength: 400 } }
-
           InputLabelProps={{ className: "textField_label" } }
-          
         />
         <div className="userpost-footer">
         <Button
           variant="contained"
           onClick={() => addNewPost()}
-          className="addPost"
-          required
+          className={isDisabled ? "addPost disabledPostButton" : "addPost"}          required
+          disabled={isDisabled}
+
         >
           Invade
         </Button>
@@ -252,12 +262,15 @@ const handleChange = (event, newValue) => {
       </div>
       {/* sx={{ width: 500 }} */}
       <BottomNavigation  value={value} onChange={handleChange} className="bottom-nav">
+      <Link to="/homepage">
       <BottomNavigationAction
         label="Home"
         value="Home"
         icon={<HomeIcon fontSize='large'/>}
       />
+      </Link>
       <BottomNavigationAction
+        onClick={()=>{viewProfile()}}
         label="Profile"
         value="Profile"
         icon={<PersonIcon fontSize='large'/>}
@@ -273,13 +286,13 @@ const handleChange = (event, newValue) => {
         icon={<ShuffleIcon fontSize='large'/>}
       />
     <BottomNavigationAction
+        onClick={()=>{logout()}}
         label="Logout"
         value="Logout"
         icon={<LogoutIcon fontSize='large'/>}
       />
       
     </BottomNavigation>
-    
     </div>
   );
 };

@@ -8,7 +8,9 @@ import SideBar from "../sidebar.jsx";
 import UsersBar from "../../usersbar/usersbar.jsx";
 import profilePFP from "../../../assets/defaultpfp.png"
 import Button from '@mui/material/Button';
-
+import BottomNavigation from '@mui/material/BottomNavigation';
+import BottomNavigationAction from '@mui/material/BottomNavigationAction';
+import KeyboardReturnIcon from '@mui/icons-material/KeyboardReturn';
 const Profile = () => {
     const location = useLocation();
     const user = location.state.user; 
@@ -18,6 +20,8 @@ const Profile = () => {
     const [posts, setPosts] = useState([]);
     const [feed, setFeed] = useState("posts");
     const [postCount, setPostCount] = useState(0);
+    const [lonelyPage, setLonelyPage] = useState(false);
+    const [noReplies, setNoReplies] = useState(false);
     useEffect(() => {
       // // Fetch posts when the component mounts
       // const fetchData = async () => {
@@ -41,12 +45,18 @@ const Profile = () => {
         const userPostsCollectionRef = collection(userDocRef, 'posts');
         const countSnapshot = await getDocs(userPostsCollectionRef);
         const userPostCount = countSnapshot.size;
+
+        if (userPostCount == 0) {
+            console.log("its empty")
+            setLonelyPage(true);
+            return false;
+        }
+        else {
+          console.log('not empty')
         setPostCount(userPostCount);
         const querySnapshot = await getDocs(userPostsCollectionRef); 
         const postsData = []; 
-        
         querySnapshot.forEach((doc) => {
-  
           const post = {
             id: doc.id, 
             ...doc.data(), 
@@ -57,11 +67,19 @@ const Profile = () => {
 
         setPosts(postsData);
         return postsData;
+      
+              }
+      
       } catch (error) {
         console.error("Error fetching posts:", error);
         return [];
       }
+
+
     };
+
+
+    
     const fetchReplies = async () => {
       try {
 
@@ -72,8 +90,17 @@ const Profile = () => {
         const userRepliesCollectionRef = collection(userDocRef, 'replies');
 
 
-        const querySnapshotreplies = await getDocs(userRepliesCollectionRef); 
+        const querySnapshotreplies = await getDocs(userRepliesCollectionRef);
+        const replyCount = querySnapshotreplies.size;
+ 
         const repliesData = [];
+
+        if (replyCount == 0) {
+          console.log("its empty")
+          setNoReplies(true);
+          return false;
+      }
+      else {
         querySnapshotreplies.forEach((doc) => {
           const reply = {
             id: doc.id, 
@@ -84,11 +111,16 @@ const Profile = () => {
                 });
         setReplies(repliesData);
         return repliesData;
+              }
       } catch (error) {
         console.error("Error fetching replies:", error);
         return [];
       }
     };
+
+    const goBack = () => {
+      navigate('/homepage')
+    }
 
     //Navs to post thats clicked
     const navToPost = (post) => {
@@ -123,6 +155,7 @@ const calculateTimeAgo = (timestamp) => {
                     <div className="profile-header">
                         <div className="profile-header-details">
                           <div className="profile-header-tags">
+                            <Button onClick={()=>goBack()} className="goback-btn"><KeyboardReturnIcon/></Button>
                             <h4 className="profile-header-username">{user.username}</h4>
                             <p className="profile-postAmount">{postCount} Posts</p>
                           </div>
@@ -155,9 +188,17 @@ const calculateTimeAgo = (timestamp) => {
                             <Button variant="text" sx={{ color: '#176daf' }} className="feedChange" onClick={()=>setFeed('posts')}><h3>Posts</h3></Button>
                             <Button variant="text" sx={{ color: '#176daf' }} className="feedChange" onClick={()=>setFeed('replies')}><h3>Replies</h3></Button>
                     </div>
-              {feed == 'posts' ?
+
+              {feed == 'posts' ? (
+
+                  (lonelyPage ? (
+                    <div className="apost">
+                      <h2 className="post-message" >Its lonely here ... </h2>
+                  </div>
+                   ) : (
               <ul>
               {posts.map((post) => (
+                
                       <div key={post.id} className="apost">
                    
                         <div className="mainpost">
@@ -178,8 +219,17 @@ const calculateTimeAgo = (timestamp) => {
                       </div>
                 ))}
               </ul>
-          : 
+
+              ))                
+
+               ) : (
           //REPLIES TAB, just copied the post tab so classes are the same
+
+          noReplies ? (
+            <div className="apost">
+              <h2 className="post-message" >This person hasnt responsed to anything ... </h2>
+          </div>
+           ) : (
           <ul>
           {replies.map((reply) => (
                   <div key={reply.id} className="apost">
@@ -201,7 +251,8 @@ const calculateTimeAgo = (timestamp) => {
                   </div>
             ))}
           </ul>
-            }
+            
+          ))}
             </div>
 
             </div>

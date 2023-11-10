@@ -24,7 +24,7 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
-
+import KeyboardReturnIcon from '@mui/icons-material/KeyboardReturn';
 const ViewPost = () => {
     const navigate = useNavigate();
     const location = useLocation();
@@ -48,7 +48,7 @@ const ViewPost = () => {
 
     const [logMsg, setLogMsg] = useState('');
     const [displayLog, setLog] = useState(false);
-
+    const [isDisabled, setIsDisabled] = useState(true);
 
     const addNewReply = async () => {
         try {
@@ -85,7 +85,15 @@ const ViewPost = () => {
             setOP(true);
         }
     }, []);
-
+    useEffect(() => {
+        // Check the length of newpost to enable/disable the input
+        if (userReply.length > 3) {
+            setIsDisabled(false);
+        } else {
+            setIsDisabled(true);
+        }
+    }, [userReply]);
+    
     const fetchReplies = async () => {
         try {
           //reference the persons posts
@@ -134,6 +142,10 @@ const ViewPost = () => {
             alert("There was an error viewing this user's profile.");
         }
     };
+
+    const goBack = () => {
+        navigate('/profile' , {state: {user}})
+      }
 
 //DELETE POST, displays confirmation popup
     const [open, setOpen] = useState(false);
@@ -195,6 +207,7 @@ const ViewPost = () => {
             </Dialog>
 
             <div className="originalPost">
+            <Button onClick={()=>goBack()} className="goback-btn"><KeyboardReturnIcon/></Button>
                 <div className="originalPostUser">
                     <div className="pfp-img-container-post">
                         <img src={profilePFP} alt="PFP" />
@@ -246,7 +259,9 @@ const ViewPost = () => {
                 />
                 <div className="userreply-footer">
                 <p>{userReply.length}/400</p>
-                <button variant="contained" onClick={() => { addNewReply() }} className="addComment">ADD COMMENT</button>
+                <button  disabled={true} onClick={() => { addNewReply() }}   
+                        className={isDisabled ? "addComment disabledButton" : "addComment"}
+                        >ADD COMMENT</button>
                 </div>
             </div>
 

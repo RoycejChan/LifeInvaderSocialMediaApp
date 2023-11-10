@@ -5,6 +5,7 @@ html, body {
     background-color: black;
     color:white;
     font-family: 'Playpen Sans';
+    overflow-x: hidden;
 
   }
   :root {
@@ -62,12 +63,7 @@ li, ul {
   margin-top: 1rem; 
 }
 
-/* .homepage { */
-  /* display:flex;
-  justify-content: center;
-  gap:5rem;
-  margin-top: 3rem; */
-/* } */
+
 
 Button { /* MATERIAL UI BUTTON tag */
   cursor: pointer;
@@ -92,3 +88,16 @@ Button { /* MATERIAL UI BUTTON tag */
   display: absolute;
   top:0;
 }
+.homepage { 
+  display: flex;
+  margin-top: 3rem; 
+  position: absolute;
+  left: 0;
+  right: 0;
+}
+.mainFeed-Container {
+  position: relative !important;
+  display: flex !important;
+  margin: 0 auto !important; /* Centering the mainFeed-Container horizontally */
+}
+
