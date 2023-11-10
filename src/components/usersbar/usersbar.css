@@ -2,10 +2,10 @@
     position: fixed;
     right:10%;
     top:5%;
-    width: 405px;
+    width: 315px;
     background-color: #15181c;
     border-radius: 3%;
-    height: 870px;
+    height: 510px;
     padding: 2rem;
     z-index: 999;
 }

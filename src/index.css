@@ -89,15 +89,6 @@ Button { /* MATERIAL UI BUTTON tag */
   top:0;
 }
 .homepage { 
-  display: flex;
-  margin-top: 3rem; 
-  position: absolute;
-  left: 0;
-  right: 0;
+  margin-top: -3rem;
+  /* position: absolute; */
 }
-.mainFeed-Container {
-  position: relative !important;
-  display: flex !important;
-  margin: 0 auto !important; /* Centering the mainFeed-Container horizontally */
-}
-

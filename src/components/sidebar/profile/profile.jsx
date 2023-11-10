@@ -3,7 +3,11 @@ import "./profile.css"
 import { useLocation } from "react-router-dom";
 import { db } from "../../../FB-config/Firebase-config.js";
 import { collection, doc, getCountFromServer, getDocs } from "firebase/firestore";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
+import { useUser } from "../../usercontext.jsx";
+import { auth } from "../../../FB-config/Firebase-config.js";
+import { signOut } from "firebase/auth";
+
 import SideBar from "../sidebar.jsx";
 import UsersBar from "../../usersbar/usersbar.jsx";
 import profilePFP from "../../../assets/defaultpfp.png"
@@ -11,7 +15,12 @@ import Button from '@mui/material/Button';
 import BottomNavigation from '@mui/material/BottomNavigation';
 import BottomNavigationAction from '@mui/material/BottomNavigationAction';
 import KeyboardReturnIcon from '@mui/icons-material/KeyboardReturn';
+import HomeIcon from '@mui/icons-material/Home';
+import PersonIcon from '@mui/icons-material/Person';
+import LogoutIcon from '@mui/icons-material/Logout';
+import ShuffleIcon from '@mui/icons-material/Shuffle';
 const Profile = () => {
+  const { userData, setUser } = useUser();
     const location = useLocation();
     const user = location.state.user; 
     const navigate = useNavigate();
@@ -30,6 +39,7 @@ const Profile = () => {
       // };
   
       // fetchData();
+      setPostCount(0);
       fetchReplies();
       fetchPosts();
     }, [user]);
@@ -47,12 +57,11 @@ const Profile = () => {
         const userPostCount = countSnapshot.size;
 
         if (userPostCount == 0) {
-            console.log("its empty")
             setLonelyPage(true);
             return false;
         }
         else {
-          console.log('not empty')
+        setLonelyPage(false)
         setPostCount(userPostCount);
         const querySnapshot = await getDocs(userPostsCollectionRef); 
         const postsData = []; 
@@ -96,11 +105,12 @@ const Profile = () => {
         const repliesData = [];
 
         if (replyCount == 0) {
-          console.log("its empty")
           setNoReplies(true);
           return false;
       }
       else {
+        setNoReplies();
+
         querySnapshotreplies.forEach((doc) => {
           const reply = {
             id: doc.id, 
@@ -147,6 +157,23 @@ const calculateTimeAgo = (timestamp) => {
     return `${daysAgo} ${daysAgo === 1 ? 'day' : 'days'} ago`;
   }
 };
+const [value, setValue] = useState('recents');
+const handleChange = (event, newValue) => {
+  setValue(newValue);
+};
+const toProfile = () => {
+  navigate('/profile', { state: { user } });
+
+}
+
+const logout = () => {
+signOut(auth).then(()=> {
+  setUser(null)
+  navigate('/');
+}).catch((err) => {
+  console.log(err);
+})
+}
 
     return (
         <div className="homepage">
@@ -259,6 +286,35 @@ const calculateTimeAgo = (timestamp) => {
 
 
         <UsersBar/>
+        <div className="bottom-profile-nav">
+        <BottomNavigation  value={value} onChange={handleChange} className="bottom-nav-profile">
+      <Link to="/homepage">
+      <BottomNavigationAction
+        label="Home"
+        value="Home"
+        icon={<HomeIcon fontSize='large'/>}
+      />
+      </Link>
+      <BottomNavigationAction
+        onClick={()=>{toProfile()}}
+        label="Profile"
+        value="Profile"
+        icon={<PersonIcon fontSize='large'/>}
+      />
+      <BottomNavigationAction
+        label="Users"
+        value="Users"
+        icon={<PersonIcon fontSize='large'/>}
+      />
+    <BottomNavigationAction
+        onClick={()=>{logout()}}
+        label="Logout"
+        value="Logout"
+        icon={<LogoutIcon fontSize='large'/>}
+      />
+      
+    </BottomNavigation>
+    </div>
         </div>
     )
 }

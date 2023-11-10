@@ -43,9 +43,6 @@
     margin-left: auto;
 }
 
-.profile-container {
-    overflow-y: hidden;
-}
 
 .viewPost-original-msg {
     font-size: 2rem;
@@ -75,4 +72,15 @@
 
 .disabledButton {
     opacity: 10%;
+}
+
+
+.alertBox {
+    position: fixed;
+    top:10%;
+    left: 40%;
+    right: 40%;
+    padding:1rem;
+    font-size: 1rem;
+    z-index: 999;
 }

@@ -13,6 +13,7 @@ import { useUser } from "../components/usercontext";
 
 
 export default function Auth() { 
+    
         const { userData, setUser } = useUser(); // Use the useUser hook to access userData and setUser
 
         const [username, setUsername] = useState("");
@@ -127,12 +128,13 @@ export default function Auth() {
 
     return ( 
         <>
+        
         {notSignedUp ?   
         
             <div className="Login-Container">
                  {loginError ? 
                 <Alert variant="filled" severity="error" className="alertBox"
-                          style={{position: 'absolute', top:'5%', left:'50', fontSize: "1.3rem" }}>
+                          >
                     {loginErrorMsg}
                 </Alert> : <></>}
                 <Paper elevation={3} square={false} className="centered-paper">

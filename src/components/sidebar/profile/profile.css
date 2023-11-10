@@ -1,14 +1,15 @@
 .profile-container {
-    position:absolute;
-    left: 30%;
-    top:5%;
-    width: 27%;
-    padding:3rem;
-    background-color: #15181c !important;
-    border-radius: 3%;
-    color:white;
+    width: 30% ;
+    background-color: #15181c;
+    padding: 3rem;
+    padding-top:5rem ;
+    margin: 0 auto !important;
+    border-left:.5px solid rgb(65, 65, 65);
+    border-right:.5px solid rgb(65, 65, 65);
 }
-
+.profile-container {
+    overflow-y: hidden;
+}
 .profile-header {
     display: flex;
     justify-content: space-around;
@@ -74,7 +75,7 @@
 
 .profile-pfp {
     width:150px;
-    height: 90px;
+    height: 120px;
 }
 
 .profile-pfp img {
@@ -94,4 +95,15 @@
 .goback-btn {
     margin-bottom: -1rem !important;
     width: 50px;
+}
+
+@media (max-width: 590px) {
+
+    .profile-details {
+        flex-direction: column;
+    }
+    .profile-pfp {
+        height: 120px;
+    }
+
 }

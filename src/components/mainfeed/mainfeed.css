@@ -1,8 +1,11 @@
 .mainfeed {
     width: 30%;
     background-color: #15181c;
-    border-radius: 3%;
     padding: 3rem;
+    padding-top:5rem ;
+    margin: 0 auto !important;
+    border-left:.5px solid rgb(65, 65, 65);
+    border-right:.5px solid rgb(65, 65, 65);
 }
 .addPost {
     width:25%;
@@ -93,23 +96,26 @@
     font-weight: 800;
     margin-left: 10px;
 }
+.mainfeed, .bottom-nav {
+    box-sizing: border-box !important; /* Include padding and border in the width */
+}
 
-
-@media (min-width: 1800px) {
+@media (min-width: 591px) {
     .bottom-nav {
+        display: none !important;
+    }
+    .bottom-nav-profile {
         display: none !important;
     }
 }
 
-@media (max-width: 2142px) {
+/* @media (max-width: 2142px) {
     .Sidebar {
-        left: 110px;
         top:5%;
         width:300px;
         height: 250px;
     }
     .usersbar {
-        right:7% !important;
         top:5%;
         width: 305px !important;
         height: 870px;
@@ -119,13 +125,13 @@
         font-size: 1.2rem !important;
     }
     .mainfeed {
-        width: 40%; /* Adjust as needed */
-        margin: 0 auto !important; /* Center the mainfeed */
+        margin: 0 auto !important;
         top: 5%;
     }
 
     
-}
+} */
+
 
 
 
@@ -133,42 +139,50 @@
 
 
 @media (max-width: 1800px) {
-    .mainfeed, .bottom-nav {
-        box-sizing: border-box !important; /* Include padding and border in the width */
-    }
+
     html {
         background-color: black !important;
     }
     .Sidebar {
-        display: none;
-        width: 50% !important;
-        left: 25%;
-        top:3%;
+        width:250px;
+        left: 10%;
     }
-    .usersbar {
-      display: none;
-      width: 50% !important;
-      left: 25%;
-      top:3%;
-    }
-    .mainfeed {
+
+    .mainfeed{
         position: relative;
-        width: 850px !important;
+        width: 40% !important;
         margin: auto 0;
         top:0%;
-        border-left:.5px solid rgb(65, 65, 65);
-        border-right:.5px solid rgb(65, 65, 65);
-    }
 
-    .bottom-nav {
-        background-color: #1f2227 !important;
-        position: fixed;
+    }
+    .profile-container {
+        position: relative;
+        width: 35% !important;
+        height: 100vh;
         margin: auto 0;
-        bottom: -.5%;
-        width: inherit; /* Inherit the width from the parent */
+        top:0%;
+
     }
 
-    
+    .usersbar {
+        width: 305px !important;
+        right:7% !important;
+        top:3%;
+        font-size: 1rem !important;
+        height: 470px !important;
+
+      }
+      .suggestedUsers {
+          gap: 0rem !important;
+          font-size: 1rem !important;
+      }
+    .usersbar-header {
+        font-size: 2rem;
+    }
+
+
+
+/*     
     .profile-container {
         left: 0 !important;
         top:0% !important;
@@ -181,6 +195,135 @@
             align-items: center;
             justify-content: space-between !important;
             width: 75% !important;
-    }
+    } */
     
+}
+
+
+
+
+
+
+@media (max-width: 1650px) {
+    .usersbar {
+        width: 210px !important;
+        right:5% !important;
+        height: 470px !important;
+
+      }
+    .usersbar-header {
+        font-size: 1.5rem;
+    }
+    .randUser {
+        justify-content: space-around;
+
+    
+}
+
+}
+@media (max-width: 1400px) {
+    .Sidebar {
+        width:250px;
+        height: 260px;
+        left: 5% !important;
+        padding: 0;
+    }
+}
+
+@media (max-width: 1186px) {
+    .sideBar-Icon {
+        display: none;
+        margin-left: 15px;
+    }
+    .usersbar {
+        display: none;
+    }
+    .mainfeed {
+        width: 65% !important;
+    }
+    .Sidebar {
+        width: 75px;
+        height: 230px;
+
+    }
+    .profile-container {
+        width: 60% !important;
+
+    }
+}
+@media (max-width: 1100px) {
+
+    .Sidebar {
+        width: 75px;
+        height: 230px;
+        left:3% !important;
+
+    }
+}
+
+@media (max-width: 770px) {
+    .alertBox {
+        left: 35% !important;
+        right: 25% !important;
+        width:30%;
+        padding:1rem;
+        font-size: 1rem;
+        z-index: 999;
+    }
+
+ }
+
+@media (max-width: 590px) {
+    
+    .Sidebar {
+        display: none;
+    }
+    .usersbar {
+      display: none;
+    }
+    .mainfeed{
+        position: relative;
+        width: 100% !important;
+    }
+    .profile-container {
+        width: 86% !important;
+    }
+    .upperpost, .postfeed, .userpost {
+        margin-left: -.1rem;;
+    }
+    .profile-header, .originalPost, .userreply,.apost{
+        margin-left: -1rem;
+        padding-right: 1rem;
+
+    }
+    .bottom-nav {
+        background-color: #1f2227 !important;
+        position: fixed;
+        margin: auto 0;
+        left: 0%;
+        bottom: 0;
+        width: inherit;
+        border-left:.5px solid rgb(65, 65, 65);
+        border-right:.5px solid rgb(65, 65, 65);
+    }
+    .bottom-nav-profile {
+        background-color: #1f2227 !important;
+        position: fixed;
+        margin: auto 0;
+        left: 0%;
+        bottom: 0;
+        width: 100%;
+        border-left:.5px solid rgb(65, 65, 65);
+        border-right:.5px solid rgb(65, 65, 65);
+    }
+
+    .alertBox {
+        position: fixed;
+        top:10%;
+        left: 40%;
+        right: 40%;
+        padding:1rem;
+        font-size: 1rem;
+        z-index: 999;
+    }
 }

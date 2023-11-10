@@ -54,7 +54,6 @@ const UsersBar = () => {
     if (docSnap.exists()) {
       navigate('/profile', { state: { user }, });
     } else {
-      console.log("No such document!");
       alert("There was an error viewing this user's profile.")
     }
   }
@@ -73,7 +72,6 @@ const UsersBar = () => {
                 <li  key={user.uid}>
                   <div className="randUser">
                     <div className="randUser-info">
-                      <p>{user.username}</p>
                       <p className="randUser-username" onClick={()=>viewProfile(user)}>@{user.username}</p>
                     </div>
                     <Button variant="text" className="stalk-Randuser" onClick={()=>viewProfile(user)}>Stalk</Button>

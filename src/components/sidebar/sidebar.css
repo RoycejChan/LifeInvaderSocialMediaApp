@@ -1,6 +1,6 @@
 .Sidebar {
     position: fixed;
-    left: 330px;
+    left: 15%;
     top:5%;
     width:300px;
     display:flex;
@@ -14,4 +14,20 @@
 
 .sideBar-Icon {
     color:white;
+}
+
+@media (max-width: 2146px) {
+
+    .usersbar {
+        top:5%;
+        width: 305px !important;
+        height: 870px;
+        font-size: 1rem;
+    }
+    .suggestedUsers {
+        font-size: 1.2rem !important;
+    }
+
+
+    
 }

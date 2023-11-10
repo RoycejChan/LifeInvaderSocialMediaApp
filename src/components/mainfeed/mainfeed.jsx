@@ -7,6 +7,8 @@ import { likePost } from "./postLogic/likePost.jsx";
 
 import { db } from "../../FB-config/Firebase-config.js";
 import { doc, getDoc } from "firebase/firestore";
+import { auth } from "../../FB-config/Firebase-config.js";
+import { signOut } from "firebase/auth";
 
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
@@ -112,7 +114,7 @@ const MainFeed = () => {
         setTimeout(() => {
             setLog(false);
             setLogMsg("");
-        }, 1000);
+        }, 3000);
 
       });
     }
@@ -145,6 +147,16 @@ const MainFeed = () => {
   const viewProfile = async (postuser) => {
         let user = postuser.User;
         navigate('/profile', { state: { user } });
+  }
+
+  const toProfile = () => {
+    navigate('/profile', { state: { user } });
+  
+  }
+
+  const toUsers = () => {
+    navigate('/users', { state: { user } });
+  
   }
 const logout = () => {
   signOut(auth).then(()=> {
@@ -183,8 +195,8 @@ const handleChange = (event, newValue) => {
     <div className="mainfeed">
 
         {displayLog ? 
-                <Alert variant="filled" severity="error" className="alertBox"
-                          style={{position: 'absolute', top:'0%', left:'40%', fontSize: "1.3rem", zIndex:'999' }}>
+                <Alert variant="filled" severity="success" className="alertBox"
+                          >
                     {logMsg}
         </Alert> : <></>}
       {/* POST SOMETHING */}
@@ -212,7 +224,7 @@ const handleChange = (event, newValue) => {
         >
           Invade
         </Button>
-        <p onClick={()=>{console.log(posts)}}>{newpost.length}/400</p>
+        <p >{newpost.length}/400</p>
         </div>
       </div>
 
@@ -270,20 +282,16 @@ const handleChange = (event, newValue) => {
       />
       </Link>
       <BottomNavigationAction
-        onClick={()=>{viewProfile()}}
+        onClick={()=>{toProfile()}}
         label="Profile"
         value="Profile"
         icon={<PersonIcon fontSize='large'/>}
       />
       <BottomNavigationAction
+        onClick={()=>{toUsers()}}
         label="Users"
         value="Users"
         icon={<PersonIcon fontSize='large'/>}
-      />
-    <BottomNavigationAction
-        label="Random Users"
-        value="Random Users"
-        icon={<ShuffleIcon fontSize='large'/>}
       />
     <BottomNavigationAction
         onClick={()=>{logout()}}

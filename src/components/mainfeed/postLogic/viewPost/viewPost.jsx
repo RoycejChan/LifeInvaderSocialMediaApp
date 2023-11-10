@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 import { likePost } from "../likePost.jsx";
 import profilePFP from "../../../../assets/defaultpfp.png";
 import { sendaReply } from "../replyPost.jsx";
-
-import { db } from "../../../../FB-config/Firebase-config.js";
+import { useUser } from "../../../usercontext.jsx";
+import { auth, db } from "../../../../FB-config/Firebase-config.js";
+import { signOut } from "firebase/auth";
 import { doc, collection, getDoc, query, deleteDoc, getDocs } from "firebase/firestore";
 
 import "./viewPost.css";
@@ -25,6 +27,13 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import KeyboardReturnIcon from '@mui/icons-material/KeyboardReturn';
+import HomeIcon from '@mui/icons-material/Home';
+import PersonIcon from '@mui/icons-material/Person';
+import LogoutIcon from '@mui/icons-material/Logout';
+import ShuffleIcon from '@mui/icons-material/Shuffle';
+import BottomNavigation from '@mui/material/BottomNavigation';
+import BottomNavigationAction from '@mui/material/BottomNavigationAction';
+
 const ViewPost = () => {
     const navigate = useNavigate();
     const location = useLocation();
@@ -138,7 +147,6 @@ const ViewPost = () => {
             let user = replyUser.User;
             navigate('/profile', { state: { user } });
         } else {
-            console.log("No such document!");
             alert("There was an error viewing this user's profile.");
         }
     };
@@ -163,7 +171,7 @@ const ViewPost = () => {
                 setLog(false);
                 setLogMsg("");
                 navigate('/homepage');
-            }, 1000);
+            }, 1000000);
         } catch (error) {
             console.error("Error deleting post:", error);
             setLogMsg("Error deleting post");
@@ -176,7 +184,23 @@ const ViewPost = () => {
         setOpen(false);
     }
 
-
+    const [value, setValue] = useState('recents');
+    const handleChange = (event, newValue) => {
+      setValue(newValue);
+    };
+    const toProfile = () => {
+      navigate('/profile', { state: { user } });
+    
+    }
+    
+    const logout = () => {
+    signOut(auth).then(()=> {
+      setUser(null)
+      navigate('/');
+    }).catch((err) => {
+      console.log(err);
+    })
+    }
 
     return (
         <div className="homepage">
@@ -185,7 +209,7 @@ const ViewPost = () => {
         <div className="profile-container">
             {displayLog ? 
                     <Alert variant="filled" severity="error" className="alertBox"
-                            style={{position: 'absolute', top:'0%', left:'40%', fontSize: "1.3rem", zIndex:'999' }}>
+                            >
                         {logMsg}
             </Alert> : <></>}
             <Dialog
@@ -259,7 +283,7 @@ const ViewPost = () => {
                 />
                 <div className="userreply-footer">
                 <p>{userReply.length}/400</p>
-                <button  disabled={true} onClick={() => { addNewReply() }}   
+                <button  disabled={isDisabled} onClick={() => { addNewReply() }}   
                         className={isDisabled ? "addComment disabledButton" : "addComment"}
                         >ADD COMMENT</button>
                 </div>
@@ -288,6 +312,35 @@ const ViewPost = () => {
             </div>
 
             <UsersBar/>
+            <div className="bottom-viewPost-nav">
+            <BottomNavigation  value={value} onChange={handleChange} className="bottom-nav-profile">
+      <Link to="/homepage">
+      <BottomNavigationAction
+        label="Home"
+        value="Home"
+        icon={<HomeIcon fontSize='large'/>}
+      />
+      </Link>
+      <BottomNavigationAction
+        onClick={()=>{toProfile()}}
+        label="Profile"
+        value="Profile"
+        icon={<PersonIcon fontSize='large'/>}
+      />
+      <BottomNavigationAction
+        label="Users"
+        value="Users"
+        icon={<PersonIcon fontSize='large'/>}
+      />
+    <BottomNavigationAction
+        onClick={()=>{logout()}}
+        label="Logout"
+        value="Logout"
+        icon={<LogoutIcon fontSize='large'/>}
+      />
+      
+    </BottomNavigation>
+    </div>
         </div>
     );
 }
