@@ -1,15 +1,16 @@
 import React, { useState, useEffect, useContext, createContext} from "react"
+import "./users.css"
 import { useLocation } from "react-router-dom";
 import { db } from "../../FB-config/Firebase-config.js";
-import { collection, doc, getCountFromServer, getDocs } from "firebase/firestore";
+import { collection, doc, getCountFromServer, getDocs, getDoc } from "firebase/firestore";
 import { useNavigate, Link } from "react-router-dom";
 import { useUser } from "../usercontext.jsx";
-import Auth from "../../LoginAuth/auth.jsx";
+import { auth } from "../../FB-config/Firebase-config.js";
 import { signOut } from "firebase/auth";
 
 import SideBar from "../sidebar/sidebar.jsx";
 import UsersBar from "../usersbar/usersbar.jsx";
-// import profilePFP from "../../../../assets/defaultpfp.png"
+import pfp from "../../assets/defaultpfp.png"
 import Button from '@mui/material/Button';
 import BottomNavigation from '@mui/material/BottomNavigation';
 import BottomNavigationAction from '@mui/material/BottomNavigationAction';
@@ -36,16 +37,17 @@ const Users = () => {
       try {
 
         //reference the persons posts
-        const userDocRef = doc(db, 'users');
+        const userDocRef = collection(db, 'users');
         const userSnapshot = await getDocs(userDocRef);
         const usersList = []; 
-        userSnapshot.forEach((user) => {
+        userSnapshot.forEach((doc) => {
+          const userData = doc.data();
           const auser = {
-            username: user.username
+            uid: doc.id, // Include the document ID
+            username: userData.username
           };
           usersList.push(auser);
-          console.log(auser)
-                });
+        });
 
 
         setUsers(usersList);
@@ -57,29 +59,13 @@ const Users = () => {
 
     };
 
-
-    
-
-
-
-    const goBack = () => {
-      navigate('/homepage')
-    }
-
-    //Navs to post thats clicked
-    const navToPost = (post) => {
-      navigate("/viewPost", { state: { post, user } });
-    };
-
 const [value, setValue] = useState('recents');
 const handleChange = (event, newValue) => {
   setValue(newValue);
 };
 const toProfile = () => {
   navigate('/profile', { state: { user } });
-
 }
-
 const logout = () => {
 signOut(auth).then(()=> {
   setUser(null)
@@ -88,13 +74,36 @@ signOut(auth).then(()=> {
   console.log(err);
 })
 }
+const viewProfile = async (user1) => {
+  const docRef = doc(db, "users", user1.uid);
+  const docSnap = await getDoc(docRef);
+  if (docSnap.exists()) {
+      let user = user1;
+      navigate('/profile', { state: { user } });
+  } else {
+      alert("There was an error viewing this user's profile.");
+  }
+};
 
     return (
         <div className="homepage">
         <SideBar/>
-            <div className="profile-container">
-             Lorem ipsum dolor sit amet consectetur, adipisicing elit. Aut nihil ex soluta voluptate itaque aspernatur quis inventore voluptates quidem sint nam maiores placeat facere, exercitationem ipsum laboriosam sunt minima incidunt?
-              HELLo
+        {/* <div className="profile-container"></div> copy css for this  */}
+            <div className="users-container">
+              <div className="users-width">
+              {users.map((user)=> (
+
+                <div className="oneUser" key={user.uid}>
+                   <div className="pfp-img-container">
+                      <img src={pfp} alt="PFP" />
+                   </div>
+                  <p>{user.username}</p>
+                  <Button variant="contained" onClick={() => viewProfile(user)}>Stalk</Button>
+                </div>
+
+
+              ))}
+                  </div>
             </div>
 
 

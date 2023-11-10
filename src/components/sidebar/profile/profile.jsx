@@ -162,7 +162,12 @@ const handleChange = (event, newValue) => {
   setValue(newValue);
 };
 const toProfile = () => {
+      
   navigate('/profile', { state: { user } });
+
+}
+const toUsers = () => {
+  navigate('/users', { state: { user } });
 
 }
 
@@ -302,6 +307,7 @@ signOut(auth).then(()=> {
         icon={<PersonIcon fontSize='large'/>}
       />
       <BottomNavigationAction
+        onClick={()=>toUsers()}
         label="Users"
         value="Users"
         icon={<PersonIcon fontSize='large'/>}

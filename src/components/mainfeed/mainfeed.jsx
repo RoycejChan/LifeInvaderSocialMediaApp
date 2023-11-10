@@ -146,8 +146,13 @@ const MainFeed = () => {
 
   const viewProfile = async (postuser) => {
         let user = postuser.User;
+        if (user) {
         navigate('/profile', { state: { user } });
-  }
+        } else {
+            alert("Refresh to reach this recent post ")
+          return false;
+        }
+      }
 
   const toProfile = () => {
     navigate('/profile', { state: { user } });

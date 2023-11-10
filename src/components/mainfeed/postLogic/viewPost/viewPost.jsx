@@ -163,7 +163,7 @@ const ViewPost = () => {
     }
     const deletePost = async () => {
         try {
-            await deleteDoc(doc(db, 'posts', post.id));
+            await deleteDoc(doc(db, 'posts', post.id)); // Deleting post from the 'posts' collection
             setOpen(false);
             setLogMsg("Post successfully deleted");
             setLog(true);
@@ -176,6 +176,7 @@ const ViewPost = () => {
             console.error("Error deleting post:", error);
             setLogMsg("Error deleting post");
             setLog(true);
+            setOpen(true);
         }
     }
     
@@ -192,7 +193,10 @@ const ViewPost = () => {
       navigate('/profile', { state: { user } });
     
     }
-    
+    const toUsers = () => {
+        navigate('/users', { state: { user } });
+      
+      }
     const logout = () => {
     signOut(auth).then(()=> {
       setUser(null)
@@ -328,6 +332,7 @@ const ViewPost = () => {
         icon={<PersonIcon fontSize='large'/>}
       />
       <BottomNavigationAction
+        onClick={()=>toUsers()}
         label="Users"
         value="Users"
         icon={<PersonIcon fontSize='large'/>}
