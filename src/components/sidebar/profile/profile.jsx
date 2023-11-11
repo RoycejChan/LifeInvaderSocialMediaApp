@@ -2,11 +2,16 @@ import React, { useState, useEffect, useContext, createContext} from "react"
 import "./profile.css"
 import { useLocation } from "react-router-dom";
 import { db } from "../../../FB-config/Firebase-config.js";
-import { collection, doc, getCountFromServer, getDocs } from "firebase/firestore";
+import { collection, doc, getCountFromServer, getDocs, updateDoc, getDoc } from "firebase/firestore";
 import { useNavigate, Link } from "react-router-dom";
 import { useUser } from "../../usercontext.jsx";
 import { auth } from "../../../FB-config/Firebase-config.js";
 import { signOut } from "firebase/auth";
+
+import { storage } from "../../../FB-config/Firebase-config.js";
+import { ref, uploadBytes, getDownloadURL} from 'firebase/storage'
+import { v4 } from 'uuid'
+
 
 import SideBar from "../sidebar.jsx";
 import UsersBar from "../../usersbar/usersbar.jsx";
@@ -19,10 +24,17 @@ import HomeIcon from '@mui/icons-material/Home';
 import PersonIcon from '@mui/icons-material/Person';
 import LogoutIcon from '@mui/icons-material/Logout';
 import ShuffleIcon from '@mui/icons-material/Shuffle';
+import Backdrop from '@mui/material/Backdrop';
+import { TextField } from "@mui/material";
+import ClearIcon from '@mui/icons-material/Clear';
+import { Alert } from "@mui/material";
+
 const Profile = () => {
   const { userData, setUser } = useUser();
+    const currentUser = userData;
     const location = useLocation();
-    const user = location.state.user; 
+
+    const user = location.state.user;
     const navigate = useNavigate();
 
     const [replies, setReplies] = useState([]);
@@ -31,18 +43,44 @@ const Profile = () => {
     const [postCount, setPostCount] = useState(0);
     const [lonelyPage, setLonelyPage] = useState(false);
     const [noReplies, setNoReplies] = useState(false);
+
+    const [profileImage, setProfileImage] = useState(null);
+    const [profileBio, setProfileBio] = useState('');
+    const [imageUpload, setImageUpload] = useState(null) 
+    const [open, setOpen] = useState(false); //state of editing profile popup
+    const [bio, setNewBio] = useState('');
+
+    const [logMsg, setLogMsg] = useState('');
+    const [displayLog, setLog] = useState(false);
+
     useEffect(() => {
-      // // Fetch posts when the component mounts
-      // const fetchData = async () => {
-      //   const postsData = await fetchPosts();
-      //   setPosts(postsData);
-      // };
-  
-      // fetchData();
+        upload();
+    }, [imageUpload])
+    useEffect(() => {
+      console.log(user.uid)
+
+      const userRef = doc(db, 'users', user.uid);
+      getDoc(userRef)
+      .then((doc) => {
+        if (doc.exists()) {
+          // Access the specific field from the document data
+          const profileImage = doc.data().profileImage;
+          setProfileImage(profileImage);
+
+          const profileBio = doc.data().profileBio;
+          setProfileBio(profileBio);
+          // You can use the profileImage field here
+        } else {
+          console.log('Document does not exist');
+        }
+      })
+      .catch((error) => {
+        console.error('Error getting document:', error);
+      });
       setPostCount(0);
       fetchReplies();
       fetchPosts();
-    }, [user]);
+    }, [user, profileBio, profileImage]);
   
     
     const fetchPosts = async () => {
@@ -55,13 +93,12 @@ const Profile = () => {
         const userPostsCollectionRef = collection(userDocRef, 'posts');
         const countSnapshot = await getDocs(userPostsCollectionRef);
         const userPostCount = countSnapshot.size;
-
         if (userPostCount == 0) {
             setLonelyPage(true);
             return false;
         }
         else {
-        setLonelyPage(false)
+        setLonelyPage(false);
         setPostCount(userPostCount);
         const querySnapshot = await getDocs(userPostsCollectionRef); 
         const postsData = []; 
@@ -180,34 +217,163 @@ signOut(auth).then(()=> {
 })
 }
 
+
+
+
+//TODO:
+
+
+
+
+const upload = () => {
+
+  if (imageUpload == null) return;
+
+  let randomLetters = v4();
+  let imageString = `${imageUpload.name}${randomLetters}`
+  console.log(imageString);
+  const imageRef = ref(storage, `images/${imageString}`)
+  uploadBytes(imageRef, imageUpload).then(()=> {
+    getDownloadURL(ref(storage, `images/${imageString}`))
+    .then((url) => {
+
+    const userDocRef = doc(db, 'users', user.uid);
+    updateDoc(userDocRef, {
+      profileImage: url, 
+    })
+      .then(() => {
+        setLog(true);
+        setProfileImage(url);
+        setLogMsg("Profile Pic Updated");
+        setTimeout(() => {
+            setLog(false);
+            setLogMsg("");
+        }, 3000);
+      })
+      .catch((error) => {
+        console.error('Error associating image with the user:', error);
+      });
+
+  })
+  .catch((error) => {
+    // Handle any errors
+    console.log(error)
+  });
+
+  })
+}
+
+const handleClose = () => {
+  setOpen(false);
+};
+const handleOpen = () => {
+  setOpen(true);
+};
+
+const editBio = () => {
+
+  const userDocRef = doc(db, 'users', user.uid);
+  
+  updateDoc(userDocRef, {
+    profileBio: bio 
+  })
+    .then(() => {
+      handleClose();
+      setLog(true);
+      setNewBio("");
+      setProfileBio(bio);
+      setLogMsg("Bio Updated");
+      setTimeout(() => {
+          setLog(false);
+          setLogMsg("");
+      }, 3000);
+    })
+    .catch((error) => {
+      console.error('Error', error);
+    });
+}
     return (
         <div className="homepage">
         <SideBar/>
             <div className="profile-container">
+            {displayLog ? 
+                <Alert variant="filled" severity="success" className="alertBox"
+                          >
+                    {logMsg}
+        </Alert> : <></>}
                     <div className="profile-header">
                         <div className="profile-header-details">
                           <div className="profile-header-tags">
                             <Button onClick={()=>goBack()} className="goback-btn"><KeyboardReturnIcon/></Button>
                             <h4 className="profile-header-username">{user.username}</h4>
                             <p className="profile-postAmount">{postCount} Posts</p>
+                          
                           </div>
+
                           <div className="editProfile">
-                            <Button variant="outlined" sx={{ color: '#176daf' }} className="editProfile">Edit Profile</Button>
+                           {currentUser.uid == user.uid ? <Button variant="outlined" sx={{ color: '#176daf', backgroundColor: '#161616' }} className="editProfile" onClick={()=>handleOpen()}>Edit Profile</Button> : <></> }
+                            <Backdrop
+                                    sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+                              open={open}
+                            >
+                              <div className="editingBio">
+                              <div className="editingBio-header">
+                              <h2>New Bio</h2>
+                              <ClearIcon onClick={()=>handleClose()}/>
+                              </div>
+                              <div className="bioInput">
+                                <TextField id="standard-basic"  
+                                          variant="standard" fullWidth   
+                                          color="warning" onChange={(e)=>setNewBio(e.target.value)}
+                                          inputProps={{ maxLength: 100 } }
+                                          value={bio}
+                                          />                              
+                                <button onClick={()=>editBio()} className="bioChangeBtn">Update Bio</button>
+                              </div>
+                                <p>{bio.length}/100</p>
+                              </div>
+                            </Backdrop>
                           </div>
+
+
                         </div>
 
                     <div className="profile-details">
                         <div className="profile-user-tags">
                             <h2 className="profile-name">{user.username}</h2>
                             <p className="profile-bio">
-                                    Hi I like to play sports and workout.
-                                    My IG is @BabyChan
+                                  {profileBio ? profileBio : "No Bio."}
                             </p>
                         </div>
-                           
                         <div className="profile-pfp">
-                            <img src={profilePFP} alt="pfp" />
-                        </div>
+  <label htmlFor="fileInput" className="alignadd">
+    {profileImage ? (
+      <div className="profile-pfp-container">
+      <img src={profileImage} alt="pfp" className="pfp" />
+      {currentUser.uid == user.uid ?
+      <>
+       <h1 className="changePFP">+</h1>
+       <input id="fileInput" type="file" onChange={(event) => { setImageUpload(event.target.files[0]) }} style={{ display: 'none' }} /> 
+      </>
+       : <></> }
+
+</div>
+      ) : (
+      <div className="profile-pfp-container">
+        <img src={profilePFP} alt="pfp" className="pfp" />
+        {currentUser.uid == user.uid ?
+        <>
+        <h1 className="changePFP">+</h1>
+       <input id="fileInput" type="file" onChange={(event) => { setImageUpload(event.target.files[0]) }} style={{ display: 'none' }} /> 
+        </>
+        : <></> }
+      </div>
+
+
+
+    )}
+  </label>
+</div>
                     </div>
                    
                     </div>
@@ -228,15 +394,32 @@ signOut(auth).then(()=> {
                       <h2 className="post-message" >Its lonely here ... </h2>
                   </div>
                    ) : (
+
+                    
               <ul>
-              {posts.map((post) => (
-                
+              {posts.map((post) => {
+
+// console.log(post)
+
+// const userPosterRef = doc(db, 'users', post.userId);
+// // Get the user document data
+// getDoc(userPosterRef).then((userDoc) => {
+//   if (userDoc.exists()) {
+//     // Access the user's profile image
+//     const userPFP = userDoc.data().profileImage;
+//   } else {
+//     console.log("No pfp")
+//   }
+//               })
+              
+                  return (
                       <div key={post.id} className="apost">
                    
                         <div className="mainpost">
                           <div className="upperpost">
                           <div className="pfp-img-container">
-                          <img src={profilePFP} alt="PFP" />
+                          <img src={profileImage ? profileImage : profilePFP} alt="User PFP" />
+
                         </div>
                               <div className="usertags">
                                 <p>@{post.Username}</p>
@@ -249,7 +432,7 @@ signOut(auth).then(()=> {
                           <hr className="post-separator" /> {/* Add a horizontal line at the bottom of each post */}
                         </div>
                       </div>
-                ))}
+)})}
               </ul>
 
               ))                

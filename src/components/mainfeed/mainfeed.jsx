@@ -45,13 +45,43 @@ const MainFeed = () => {
   const [logMsg, setLogMsg] = useState('');
   const [displayLog, setLog] = useState(false);
   const [isDisabled, setIsDisabled] = useState(true);
-  // on page load, fetch posts from db, and display it
+
+
+
+const [profilePics, setProfilePics] = useState({});
+
+useEffect(() => {
+  const getProfilePics = async () => {
+    const picData = { ...profilePics };
+    await Promise.all(
+      posts.map(async (post) => {
+        try {
+          const userDocRef = doc(db, "users", post.userId);
+          const docSnap = await getDoc(userDocRef);
+
+          if (docSnap.exists()) {
+            const profilePic = docSnap.data().profileImage;
+            picData[post.userId] = profilePic;
+          }
+        } catch (error) {
+          console.error("Error getting document:", error);
+        }
+      })
+    );
+
+    setProfilePics(picData);
+  };
+
+  getProfilePics();
+}, [posts]);
+
+
   useEffect(() => {
     fetchPosts();
   }, []);
 
   useEffect(() => {
-    // Check the length of newpost to enable/disable the input
+    // Check the length of newpost to enable/disable the addPost btn
     if (newpost.length > 3) {
         setIsDisabled(false);
     } else {
@@ -69,7 +99,6 @@ const MainFeed = () => {
       const reversedPosts = sortedPosts.reverse();
       setPosts(reversedPosts);
       
-      // Initialize like state for each post to false
       const initialLikeState = {};
       reversedPosts.forEach((post) => {
         initialLikeState[post.id] = false;
@@ -79,6 +108,8 @@ const MainFeed = () => {
       console.error("Error fetching posts:", error);
     }
   };
+
+  
   // Adds new post, logic is in addPost.jsx
   const addNewPost = async () => {
     if (newpost.length < 2) {
@@ -93,12 +124,10 @@ const MainFeed = () => {
         likes: 0,
       };
   
-      // Clone the current like state to avoid modifying the state directly
       const updatedLikeState = { ...isLiked };
       updatedLikeState[postToAdd.id] = false;
       setIsLiked(updatedLikeState);
   
-      // Temporary like count changes (initialize likes to 0)
       setTemporaryLikes((prevLikes) => {
         const updatedLikes = { ...prevLikes };
         updatedLikes[postToAdd.id] = 0;
@@ -106,7 +135,7 @@ const MainFeed = () => {
       });
   
       await addPost(user, newpost).then(() => {
-        setNewPost(""); // Clear the new post input field
+        setNewPost(""); 
         setPosts((prevPosts) => [postToAdd, ...prevPosts]);
 
         setLog(true);
@@ -172,6 +201,7 @@ const logout = () => {
   })
 }
 
+// ineterferes with another features forgot which one
 // const calculateTimeAgo = (timestamp) => {
 //   const now = new Date();
 //   const postDate = timestamp.toDate(); // Convert Firestore timestamp to Date object
@@ -238,13 +268,15 @@ const handleChange = (event, newValue) => {
       <div className="postfeed">
         <ul>
           {posts.map((post) => (
+
+
             <div key={post.id} className="apost">
           
               <div className="mainpost">
        
                 <div className="upperpost">
                 <div className="pfp-img-container">
-                <img src={pfp} alt="PFP" />
+                                  <img src={profilePics[post.userId] || pfp} alt="PFP" />
               </div>
                   <div className="usertags">
                     <h3 className="usernameTag" onClick={() => viewProfile(post)}>@{post.Username}</h3>

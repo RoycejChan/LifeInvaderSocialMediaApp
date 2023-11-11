@@ -1,19 +1,16 @@
 TODO: PROFILE SECTION :
-make edit profile btn function to edit bio n stuff
-//fix timestamp and addingpost interferance
-//post feed and posts count not chaning when clicking on usersbar
+//make code look better lol
 
 
 DONE
-//site is responsive 
-//add bottom nav
-//make nav bar responsive
-//posts no reply, make background same color ass post so its not black
-// when lonely here too
-//add responsiveness to error logs
-and add post log 
-//fix imagae responsiveness
-
+added posts profile pics
+add images to users page to
+added alert when changed image and bio and real time change when user edits their profile
+added functionality to change bio and change it to ui, make responsive
+added images only to profile page
+added backdrop and edit profile popup,
+bio cant be longer than 100 letters
+can only can edit bio and profile if user id == profile id
 
 MAIN PROBLEM
 //on profile tab, post id is different than mainfeed post id, so viewpost function cant find it RIP, data inconsistency
@@ -21,5 +18,11 @@ things i wish i couldve done better, consistent data, user.id and user.uid confu
 //on inital load already check, if user refreshes their ui doesnt show they liked a post
 
 
+not a full product. 
+Bugs need to be fixed/Features needed
 
-//padding distrupts bottom nav and main feed
+
+//Timestamp ago on mainfeed / not profile page
+//Profile Images on replies tab on profile page 
+//Like Count can be better
+//adding post to the ui without having to refresh page = no real db data on the ui post as its temporary until users refreshes pages. (same with likes)

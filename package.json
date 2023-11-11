@@ -19,7 +19,8 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.18.0",
-    "time-ago": "^0.2.1"
+    "time-ago": "^0.2.1",
+    "uuid": "^9.0.1"
   },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^6.0.0",

@@ -171,7 +171,7 @@ const ViewPost = () => {
                 setLog(false);
                 setLogMsg("");
                 navigate('/homepage');
-            }, 1000000);
+            }, 2000);
         } catch (error) {
             console.error("Error deleting post:", error);
             setLogMsg("Error deleting post");

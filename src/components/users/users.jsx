@@ -44,7 +44,8 @@ const Users = () => {
           const userData = doc.data();
           const auser = {
             uid: doc.id, // Include the document ID
-            username: userData.username
+            username: userData.username,
+            profilePic: userData.profileImage
           };
           usersList.push(auser);
         });
@@ -95,7 +96,7 @@ const viewProfile = async (user1) => {
 
                 <div className="oneUser" key={user.uid}>
                    <div className="pfp-img-container">
-                      <img src={pfp} alt="PFP" />
+                      <img src={user.profilePic ? user.profilePic : pfp} alt="PFP" />
                    </div>
                   <p>{user.username}</p>
                   <Button variant="contained" onClick={() => viewProfile(user)}>Stalk</Button>

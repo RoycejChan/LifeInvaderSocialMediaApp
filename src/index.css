@@ -79,9 +79,16 @@ Button { /* MATERIAL UI BUTTON tag */
   height: 80px;
 }
 
+
 .pfp-img-container img {
   max-width: 100%;
   height: auto;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.pfp-img-container:hover {
+  opacity: 0%;
 }
 
 .alertBox {

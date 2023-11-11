@@ -56,11 +56,14 @@
     flex-direction: column;
 }
 
-.profile-user-tags > * {
-    margin: 0.3rem; /* Adjust the margin on individual elements */
-}
 .profile-bio {
     margin-top: 1rem;
+    max-width: 300px; /* Set a maximum width */
+    word-break: break-all;
+  }
+
+.profile-user-tags > * {
+    margin: 0.3rem; 
 }
 .user-follow-details {
     display: flex;
@@ -69,20 +72,52 @@
 .profile-details {
     display: flex;
     align-items: center;
-    gap:1rem;
+    justify-content: space-around;
     margin-top: 2rem;
+    margin-bottom: 1rem;
+    width: 100%;
+    gap: 1rem;
 }
 
 .profile-pfp {
-    width:150px;
-    height: 120px;
+    width:160px;
+    height: 130px;
 }
 
-.profile-pfp img {
+.pfp {
     width: 100%;
     height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
 }
+.alignadd {
+    cursor: pointer;
 
+}
+.profile-pfp-container {
+    width:160px;
+    height: 160px;
+    position: relative;
+}
+.changePFP {
+    opacity: 0;
+  }
+
+.pfp:hover {
+    opacity: 50%;
+
+  }
+.pfp-img-container:hover {
+  opacity: 1;
+}
+.pfp:hover + .changePFP {
+    opacity: 75;
+    z-index: 1;
+    position: absolute;
+    top: 40%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
 .usertags{
     display: flex;
     flex-direction: column;
@@ -97,13 +132,54 @@
     width: 50px;
 }
 
-@media (max-width: 590px) {
 
+
+.editingBio {
+    background-color: rgb(35, 35, 73); 
+    padding: 2rem;
+    border-radius: 5%;
+    width: 500px;
+    z-index: 999;
+    position: absolute;
+}
+.bioInput {
+    display: flex;
+    gap: 1rem;
+}
+.bioChangeBtn {
+    background-color: forestgreen;
+    border: none;
+    border-radius: 5%;
+    width: 10rem;
+}
+
+.editingBio-header {
+    display: flex;
+    justify-content: space-between;
+}
+
+@media (max-width: 590px) {
+    .editingBio {
+        width: 400px;
+    }
     .profile-details {
         flex-direction: column;
     }
     .profile-pfp {
         height: 120px;
+        margin: 2rem 0rem;
     }
 
+}
+
+@media (max-width: 490px) {
+    .editingBio {
+        width: 300px;
+    }
+    .bioInput {
+        flex-direction: column;
+    }
+    .bioChangeBtn {
+        padding: .5rem;
+    }
 }

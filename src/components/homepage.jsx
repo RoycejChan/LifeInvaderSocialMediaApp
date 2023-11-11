@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useState } from "react"
 
 // RENDERES ALL 3 components
 import SideBar from './sidebar/sidebar'
@@ -7,9 +7,12 @@ import UsersBar from "./usersbar/usersbar"
 import "../index.css"
 
 const Homepage = () => {
+
+
   return (
     <div className="homepage">
         <SideBar/>
+      
         <div className="mainFeed-Container">
         <MainFeed/>
         </div>
