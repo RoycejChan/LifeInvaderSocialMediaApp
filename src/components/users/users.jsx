@@ -64,8 +64,8 @@ const [value, setValue] = useState('recents');
 const handleChange = (event, newValue) => {
   setValue(newValue);
 };
-const toProfile = () => {
-  navigate('/profile', { state: { user } });
+const toProfile = () => {navigate('/profile', { state: { user } });
+
 }
 const logout = () => {
 signOut(auth).then(()=> {

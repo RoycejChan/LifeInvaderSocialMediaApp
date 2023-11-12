@@ -1,17 +1,16 @@
 import React, { useState, useEffect } from "react";
-import { useLocation } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
-import { Link } from "react-router-dom";
+import { useLocation, useNavigate, Link } from "react-router-dom";
 
 import { likePost } from "../likePost.jsx";
 import profilePFP from "../../../../assets/defaultpfp.png";
 import { sendaReply } from "../replyPost.jsx";
-import { useUser } from "../../../usercontext.jsx";
+
+import "./viewPost.css";
+
 import { auth, db } from "../../../../FB-config/Firebase-config.js";
 import { signOut } from "firebase/auth";
 import { doc, collection, getDoc, query, deleteDoc, getDocs } from "firebase/firestore";
 
-import "./viewPost.css";
 
 import { Alert } from "@mui/material";
 import SideBar from "../../../sidebar/sidebar.jsx";
@@ -23,27 +22,29 @@ import ForumIcon from '@mui/icons-material/Forum';
 import DeleteIcon from '@mui/icons-material/Delete';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import KeyboardReturnIcon from '@mui/icons-material/KeyboardReturn';
 import HomeIcon from '@mui/icons-material/Home';
 import PersonIcon from '@mui/icons-material/Person';
 import LogoutIcon from '@mui/icons-material/Logout';
-import ShuffleIcon from '@mui/icons-material/Shuffle';
 import BottomNavigation from '@mui/material/BottomNavigation';
 import BottomNavigationAction from '@mui/material/BottomNavigationAction';
 
 const ViewPost = () => {
     const navigate = useNavigate();
     const location = useLocation();
+
+    //navigates to the post with the state of the user and the post 
     const user = location.state.user;
     const post = location.state.post;
-    const [OP, setOP] = useState(false);
 
-    const [currentPost, setPost] = useState({});
-    const [postReplies, setPostReplies] = useState([]);
-    const [userReply, setUserReply] = useState("");
+    const [OP, setOP] = useState(false); //if the user is the OP or userid = post.userid
+
+    const [postReplies, setPostReplies] = useState([]); 
+
+    const [userReply, setUserReply] = useState(""); // user reply message input
+
+
     const [currentFormattedDate, setCurrentDate] = useState("");
     const currentDate = new Date();
     const month = currentDate.getMonth() + 1;
@@ -52,7 +53,7 @@ const ViewPost = () => {
     const minutes = currentDate.getMinutes();
 
     const [isLiked, setIsLiked] = useState(false); // For the main post
-    const [temporaryLikes, setTemporaryLikes] = useState(0); // Temporary like count changes for the main post
+    const [temporaryLikes, setTemporaryLikes] = useState(0); // Temporary like count changes for the users ui
 
 
     const [logMsg, setLogMsg] = useState('');
@@ -61,14 +62,12 @@ const ViewPost = () => {
 
     const addNewReply = async () => {
         try {
-            
             const replyData = {
                 User: user,
                 Username: user.username,
                 Message: userReply,
                 Date: currentFormattedDate,
             };
-
             // Clear the userReply state
             setUserReply("");
 
@@ -82,9 +81,7 @@ const ViewPost = () => {
             setPostReplies((prevReplies) => [...prevReplies, replyData]);
 
 
-        } catch (error) {
-            console.error("Error adding a reply:", error);
-        }
+        } catch (error) {console.error("Error adding a reply:", error);}
     };
 
     useEffect(() => {
@@ -94,6 +91,7 @@ const ViewPost = () => {
             setOP(true);
         }
     }, []);
+
     useEffect(() => {
         // Check the length of newpost to enable/disable the input
         if (userReply.length > 3) {
@@ -103,6 +101,8 @@ const ViewPost = () => {
         }
     }, [userReply]);
     
+
+
     const fetchReplies = async () => {
         try {
           //reference the persons posts
@@ -131,11 +131,11 @@ const ViewPost = () => {
     
         if (likeState) {
             // If the post is liked, increase the like count and set isLiked to true to make icon red
-            setTemporaryLikes((prevLikes) => prevLikes + 1);
+            setTemporaryLikes((prevLikes) => prevLikes - 1);
             setIsLiked(true);
         } else {
             // If the post is unliked, decrease the like count and set isLiked to false to make icon go back to original color
-            setTemporaryLikes((prevLikes) => prevLikes - 1);
+            setTemporaryLikes((prevLikes) => prevLikes + 1);
             setIsLiked(false);
         }
     };
@@ -189,10 +189,7 @@ const ViewPost = () => {
     const handleChange = (event, newValue) => {
       setValue(newValue);
     };
-    const toProfile = () => {
-      navigate('/profile', { state: { user } });
-    
-    }
+    const toProfile = () => {navigate('/profile', { state: { user } }); }
     const toUsers = () => {
         navigate('/users', { state: { user } });
       
@@ -235,7 +232,7 @@ const ViewPost = () => {
             </Dialog>
 
             <div className="originalPost">
-            <Button onClick={()=>goBack()} className="goback-btn"><KeyboardReturnIcon/></Button>
+                <Button onClick={()=>goBack()} className="goback-btn"><KeyboardReturnIcon/></Button>
                 <div className="originalPostUser">
                     <div className="pfp-img-container-post">
                         <img src={profilePFP} alt="PFP" />
@@ -260,10 +257,10 @@ const ViewPost = () => {
                     />
                 <div className="viewPost-btns">
                     <div className="left-viewPost">
-                    <Button variant="text" onClick={() => likeaPost(post)}>
-                        <ThumbUpIcon className="post-btn like-icon" style={isLiked ? { color: "darkred" } : {}} />
-                        <p className="postLikes">{post.likes + temporaryLikes}</p>
-                    </Button>
+                        <Button variant="text" onClick={() => likeaPost(post)}>
+                            <ThumbUpIcon className="post-btn like-icon" style={isLiked ? { color: "darkred" } : {}} />
+                                <p className="postLikes">{post.likes + temporaryLikes}</p>
+                        </Button>
                     <ForumIcon className="post-btn viewPost-comment-btn"/>
                     </div>
 
@@ -286,10 +283,11 @@ const ViewPost = () => {
                     fullWidth
                 />
                 <div className="userreply-footer">
-                <p>{userReply.length}/400</p>
-                <button  disabled={isDisabled} onClick={() => { addNewReply() }}   
-                        className={isDisabled ? "addComment disabledButton" : "addComment"}
-                        >ADD COMMENT</button>
+                    <p>{userReply.length}/400</p>
+                    <button  disabled={isDisabled} onClick={() => { addNewReply() }}   
+                            className={isDisabled ? "addComment disabledButton" : "addComment"}>
+                            ADD COMMENT
+                    </button>
                 </div>
             </div>
 
@@ -299,12 +297,12 @@ const ViewPost = () => {
                             
                             <div className="mainpost">
                                 <div className="upperpost">
-                                <div className="pfp-img-container">
-                                <img src={profilePFP} alt="PFP" />
-                            </div>
+                                    <div className="pfp-img-container">
+                                        <img src={profilePFP} alt="PFP" />
+                                    </div>
                                     <div className="usertagspost">
-                                    <p className="usernameTag" onClick={() => viewProfile(postReply)}>@{postReply.Username}</p>
-                                    <p className="replying-to">Replying to @{post.Username}</p>
+                                        <p className="usernameTag" onClick={() => viewProfile(postReply)}>@{postReply.Username}</p>
+                                        <p className="replying-to">Replying to @{post.Username}</p>
                                     </div>
                                 </div>
                                 <p className="post-message">{postReply.Message}</p>
@@ -318,32 +316,32 @@ const ViewPost = () => {
             <UsersBar/>
             <div className="bottom-viewPost-nav">
             <BottomNavigation  value={value} onChange={handleChange} className="bottom-nav-profile">
-      <Link to="/homepage">
-      <BottomNavigationAction
-        label="Home"
-        value="Home"
-        icon={<HomeIcon fontSize='large'/>}
-      />
-      </Link>
-      <BottomNavigationAction
-        onClick={()=>{toProfile()}}
-        label="Profile"
-        value="Profile"
-        icon={<PersonIcon fontSize='large'/>}
-      />
-      <BottomNavigationAction
-        onClick={()=>toUsers()}
-        label="Users"
-        value="Users"
-        icon={<PersonIcon fontSize='large'/>}
-      />
-    <BottomNavigationAction
-        onClick={()=>{logout()}}
-        label="Logout"
-        value="Logout"
-        icon={<LogoutIcon fontSize='large'/>}
-      />
-      
+                <Link to="/homepage">
+                <BottomNavigationAction
+                    label="Home"
+                    value="Home"
+                    icon={<HomeIcon fontSize='large'/>}
+                />
+                </Link>
+                <BottomNavigationAction
+                    onClick={()=>{toProfile()}}
+                    label="Profile"
+                    value="Profile"
+                    icon={<PersonIcon fontSize='large'/>}
+                />
+                <BottomNavigationAction
+                    onClick={()=>toUsers()}
+                    label="Users"
+                    value="Users"
+                    icon={<PersonIcon fontSize='large'/>}
+                />
+                <BottomNavigationAction
+                    onClick={()=>{logout()}}
+                    label="Logout"
+                    value="Logout"
+                    icon={<LogoutIcon fontSize='large'/>}
+                />
+                
     </BottomNavigation>
     </div>
         </div>

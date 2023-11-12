@@ -87,9 +87,7 @@ Button { /* MATERIAL UI BUTTON tag */
   object-fit: cover;
 }
 
-.pfp-img-container:hover {
-  opacity: 0%;
-}
+
 
 .alertBox {
   display: absolute;

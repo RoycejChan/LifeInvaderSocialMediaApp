@@ -23,6 +23,8 @@ export default function Auth() {
         const [loginError, setLoginError] = useState(false);
         const [loginErrorMsg, setLoginErrorMsg] = useState(false);
 
+
+
         const getUsernameFromDatabase = async (uid) => {
             try {
               const userDocRef = doc(db, 'users', uid);
@@ -35,7 +37,6 @@ export default function Auth() {
             } catch (error) {
               console.error("Error getting username:", error);
             }
-          
             return null; 
           };
 
@@ -130,7 +131,7 @@ export default function Auth() {
         <>
         
         {notSignedUp ?   
-        
+                   //signUp form
             <div className="Login-Container">
                  {loginError ? 
                 <Alert variant="filled" severity="error" className="alertBox"
@@ -180,7 +181,7 @@ export default function Auth() {
                 </Paper>
             </div>
 : 
-           
+           //login form
         <div className="Login-Container">
 
             {loginError ? 
@@ -225,8 +226,6 @@ export default function Auth() {
             <p>{loginError}</p>
         </Paper>
         </div>
-
-    
        
 }
         </>

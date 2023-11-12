@@ -25,14 +25,11 @@ const SideBar = () => {
   
 
 //Navigates to profile page component with the user thats clicked on data
-const toProfile = () => {
-  navigate('/profile', { state: { user } });
+const toProfile = () => {navigate('/profile', { state: { user } });}
 
-}
-const toUsers = () => {
-  navigate('/users', { state: { user } });
 
-}
+const toUsers = () => {navigate('/users', { state: { user } });}
+
 //logs out
 const logout = () => {
   signOut(auth).then(()=> {

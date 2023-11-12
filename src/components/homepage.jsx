@@ -12,10 +12,7 @@ const Homepage = () => {
   return (
     <div className="homepage">
         <SideBar/>
-      
-        <div className="mainFeed-Container">
         <MainFeed/>
-        </div>
         <UsersBar />
     </div>
     )

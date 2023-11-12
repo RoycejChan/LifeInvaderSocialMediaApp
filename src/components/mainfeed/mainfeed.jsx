@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
+
 import { useUser } from "../usercontext.jsx";
 import { getPosts } from "./postLogic/getPosts.jsx";
 import { addPost } from "./postLogic/addPost.jsx";
@@ -17,10 +18,6 @@ import ForumIcon from "@mui/icons-material/Forum";
 import { Alert } from "@mui/material";
 import BottomNavigation from '@mui/material/BottomNavigation';
 import BottomNavigationAction from '@mui/material/BottomNavigationAction';
-import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import ListItemText from '@mui/material/ListItemText';
 import HomeIcon from '@mui/icons-material/Home';
 import PersonIcon from '@mui/icons-material/Person';
 import LogoutIcon from '@mui/icons-material/Logout';
@@ -29,23 +26,24 @@ import ShuffleIcon from '@mui/icons-material/Shuffle';
 import "./mainfeed.css";
 import "./replyBox.css";
 import pfp from "../../assets/defaultpfp.png";
-import { Padding } from "@mui/icons-material";
+
 
 const MainFeed = () => {
   const { userData, setUser } = useUser();
   const user = userData; //user credentials
   const navigate = useNavigate();
 
-  const [newpost, setNewPost] = useState("");
+  const [newpost, setNewPost] = useState(""); //user newpost input
   const [posts, setPosts] = useState([]);
+
   const [isLiked, setIsLiked] = useState({}); // Individual like state for each post
   const [temporaryLikes, setTemporaryLikes] = useState({}); // Temporary like count changes
 
+  const [value, setValue] = useState('recents'); //changes value of mobile nav 
 
   const [logMsg, setLogMsg] = useState('');
   const [displayLog, setLog] = useState(false);
-  const [isDisabled, setIsDisabled] = useState(true);
-
+  const [isDisabled, setIsDisabled] = useState(true); //button disabled until user types min 3 characters
 
 
 const [profilePics, setProfilePics] = useState({});
@@ -169,9 +167,7 @@ useEffect(() => {
     });
   };
 
-  const navToPost = (post) => {
-    navigate("/viewPost", { state: { post, user } });
-  };
+  const navToPost = (post) => {navigate("/viewPost", { state: { post, user } });};
 
   const viewProfile = async (postuser) => {
         let user = postuser.User;
@@ -183,15 +179,10 @@ useEffect(() => {
         }
       }
 
-  const toProfile = () => {
-    navigate('/profile', { state: { user } });
-  
-  }
+  const toProfile = () => {navigate('/profile', { state: { user } });}
 
-  const toUsers = () => {
-    navigate('/users', { state: { user } });
-  
-  }
+  const toUsers = () => {navigate('/users', { state: { user } });}
+
 const logout = () => {
   signOut(auth).then(()=> {
     setUser(null)
@@ -221,19 +212,18 @@ const logout = () => {
 //     return `${daysAgo} ${daysAgo === 1 ? 'day' : 'days'} ago`;
 //   }
 // };
-const [value, setValue] = useState('recents');
-const handleChange = (event, newValue) => {
-  setValue(newValue);
-};
-  return (
+const handleChange = (event, newValue) => {setValue(newValue);};
+  
+
+return (
     // MAIN FEED CONTAINER
     <div className="mainfeed">
 
         {displayLog ? 
-                <Alert variant="filled" severity="success" className="alertBox"
-                          >
+                <Alert variant="filled" severity="success" className="alertBox">
                     {logMsg}
-        </Alert> : <></>}
+                </Alert> 
+                : <></>}
       {/* POST SOMETHING */}
       <div className="userpost">
         <TextField
@@ -250,16 +240,15 @@ const handleChange = (event, newValue) => {
           InputLabelProps={{ className: "textField_label" } }
         />
         <div className="userpost-footer">
-        <Button
-          variant="contained"
-          onClick={() => addNewPost()}
-          className={isDisabled ? "addPost disabledPostButton" : "addPost"}          required
-          disabled={isDisabled}
-
-        >
-          Invade
-        </Button>
-        <p >{newpost.length}/400</p>
+          <Button
+            variant="contained"
+            onClick={() => addNewPost()}
+            className={isDisabled ? "addPost disabledPostButton" : "addPost"}          required
+            disabled={isDisabled}
+            >
+            Invade
+          </Button>
+        <p>{newpost.length}/400</p>
         </div>
       </div>
 
@@ -275,12 +264,11 @@ const handleChange = (event, newValue) => {
               <div className="mainpost">
        
                 <div className="upperpost">
-                <div className="pfp-img-container">
-                                  <img src={profilePics[post.userId] || pfp} alt="PFP" />
-              </div>
+                  <div className="pfp-img-container">
+                      <img src={profilePics[post.userId] || pfp} alt="PFP" />
+                  </div>
                   <div className="usertags">
                     <h3 className="usernameTag" onClick={() => viewProfile(post)}>@{post.Username}</h3>
-                    {/* <p>{calculateTimeAgo(post.Date)}</p> */}
                   </div>
                 </div>
                 <div className="post-msg">
@@ -311,32 +299,32 @@ const handleChange = (event, newValue) => {
       </div>
       {/* sx={{ width: 500 }} */}
       <BottomNavigation  value={value} onChange={handleChange} className="bottom-nav">
-      <Link to="/homepage">
-      <BottomNavigationAction
-        label="Home"
-        value="Home"
-        icon={<HomeIcon fontSize='large'/>}
-      />
-      </Link>
-      <BottomNavigationAction
-        onClick={()=>{toProfile()}}
-        label="Profile"
-        value="Profile"
-        icon={<PersonIcon fontSize='large'/>}
-      />
-      <BottomNavigationAction
-        onClick={()=>{toUsers()}}
-        label="Users"
-        value="Users"
-        icon={<PersonIcon fontSize='large'/>}
-      />
-    <BottomNavigationAction
-        onClick={()=>{logout()}}
-        label="Logout"
-        value="Logout"
-        icon={<LogoutIcon fontSize='large'/>}
-      />
-      
+          <Link to="/homepage">
+          <BottomNavigationAction
+            label="Home"
+            value="Home"
+            icon={<HomeIcon fontSize='large'/>}
+          />
+          </Link>
+          <BottomNavigationAction
+            onClick={()=>{toProfile()}}
+            label="Profile"
+            value="Profile"
+            icon={<PersonIcon fontSize='large'/>}
+          />
+          <BottomNavigationAction
+            onClick={()=>{toUsers()}}
+            label="Users"
+            value="Users"
+            icon={<PersonIcon fontSize='large'/>}
+          />
+        <BottomNavigationAction
+            onClick={()=>{logout()}}
+            label="Logout"
+            value="Logout"
+            icon={<LogoutIcon fontSize='large'/>}
+          />
+          
     </BottomNavigation>
     </div>
   );

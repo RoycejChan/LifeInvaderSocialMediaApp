@@ -2,6 +2,7 @@ import { doc, collection, getDocs, addDoc, deleteDoc, query, where } from "fireb
 import { db } from "../../../FB-config/Firebase-config";
 
 export const likePost = async (post, user) => {
+    
     try {
         const postRef = doc(db, 'posts', post.id);
         const likesCollectionRef = collection(postRef, 'likes');

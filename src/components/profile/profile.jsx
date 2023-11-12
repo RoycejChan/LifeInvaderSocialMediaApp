@@ -1,21 +1,25 @@
-import React, { useState, useEffect, useContext, createContext} from "react"
-import "./profile.css"
+import React, { useState, useEffect} from "react"
 import { useLocation } from "react-router-dom";
-import { db } from "../../../FB-config/Firebase-config.js";
-import { collection, doc, getCountFromServer, getDocs, updateDoc, getDoc } from "firebase/firestore";
 import { useNavigate, Link } from "react-router-dom";
-import { useUser } from "../../usercontext.jsx";
-import { auth } from "../../../FB-config/Firebase-config.js";
+
+import SideBar from "../sidebar/sidebar.jsx";
+import UsersBar from "../usersbar/usersbar.jsx";
+import profilePFP from "../../assets/defaultpfp.png"
+import { useUser } from "../usercontext.jsx";
+
+import "./profile.css"
+
+import { db } from "../../FB-config/Firebase-config.js";
+import { collection, doc, getDocs, updateDoc, getDoc } from "firebase/firestore";
+import { auth } from "../../FB-config/Firebase-config.js";
 import { signOut } from "firebase/auth";
-
-import { storage } from "../../../FB-config/Firebase-config.js";
+import { storage } from "../../FB-config/Firebase-config.js";
 import { ref, uploadBytes, getDownloadURL} from 'firebase/storage'
-import { v4 } from 'uuid'
 
+import { v4 } from 'uuid' // some library used to generate random string of letters for image uploads.
+                          //users might have same image names ex. imgpfp.png1 or coverImage.png1 or portfolio.pdf, common image names,
+                          // the library helps to generate and add random string to the end of the img string name to prevent duplicates.
 
-import SideBar from "../sidebar.jsx";
-import UsersBar from "../../usersbar/usersbar.jsx";
-import profilePFP from "../../../assets/defaultpfp.png"
 import Button from '@mui/material/Button';
 import BottomNavigation from '@mui/material/BottomNavigation';
 import BottomNavigationAction from '@mui/material/BottomNavigationAction';
@@ -23,10 +27,10 @@ import KeyboardReturnIcon from '@mui/icons-material/KeyboardReturn';
 import HomeIcon from '@mui/icons-material/Home';
 import PersonIcon from '@mui/icons-material/Person';
 import LogoutIcon from '@mui/icons-material/Logout';
+import ClearIcon from '@mui/icons-material/Clear';
 import ShuffleIcon from '@mui/icons-material/Shuffle';
 import Backdrop from '@mui/material/Backdrop';
 import { TextField } from "@mui/material";
-import ClearIcon from '@mui/icons-material/Clear';
 import { Alert } from "@mui/material";
 
 const Profile = () => {
@@ -39,25 +43,29 @@ const Profile = () => {
 
     const [replies, setReplies] = useState([]);
     const [posts, setPosts] = useState([]);
-    const [feed, setFeed] = useState("posts");
+    const [feed, setFeed] = useState("posts"); //the tab the user is on, posts or replies tab of a profile
     const [postCount, setPostCount] = useState(0);
-    const [lonelyPage, setLonelyPage] = useState(false);
-    const [noReplies, setNoReplies] = useState(false);
+    const [lonelyPage, setLonelyPage] = useState(false); //if user has no posts
+    const [noReplies, setNoReplies] = useState(false); //if user has no replies
 
     const [profileImage, setProfileImage] = useState(null);
-    const [profileBio, setProfileBio] = useState('');
     const [imageUpload, setImageUpload] = useState(null) 
-    const [open, setOpen] = useState(false); //state of editing profile popup
+
+    const [open, setOpen] = useState(false); //state of editing profile popup for bio
+    const [profileBio, setProfileBio] = useState('');
     const [bio, setNewBio] = useState('');
+
+    const [value, setValue] = useState('recents'); // Changes value text for mobile navbar
 
     const [logMsg, setLogMsg] = useState('');
     const [displayLog, setLog] = useState(false);
 
-    useEffect(() => {
+    useEffect(() => { //when user uploads new pfp, executes upload to db, then uploads it to ui in next useeffect
         upload();
     }, [imageUpload])
-    useEffect(() => {
-      console.log(user.uid)
+
+
+    useEffect(() => {  //code executes if user changes profile they're viewing, or if they change their bio/pfp
 
       const userRef = doc(db, 'users', user.uid);
       getDoc(userRef)
@@ -65,11 +73,9 @@ const Profile = () => {
         if (doc.exists()) {
           // Access the specific field from the document data
           const profileImage = doc.data().profileImage;
-          setProfileImage(profileImage);
-
           const profileBio = doc.data().profileBio;
+          setProfileImage(profileImage);
           setProfileBio(profileBio);
-          // You can use the profileImage field here
         } else {
           console.log('Document does not exist');
         }
@@ -80,7 +86,7 @@ const Profile = () => {
       setPostCount(0);
       fetchReplies();
       fetchPosts();
-    }, [user, profileBio, profileImage]);
+    }, [user, profileBio, profileImage]); 
   
     
     const fetchPosts = async () => {
@@ -165,14 +171,10 @@ const Profile = () => {
       }
     };
 
-    const goBack = () => {
-      navigate('/homepage')
-    }
+const goBack = () => {navigate('/homepage')}
 
     //Navs to post thats clicked
-    const navToPost = (post) => {
-      navigate("/viewPost", { state: { post, user } });
-    };
+const navToPost = (post) => {navigate("/viewPost", { state: { post, user } });};
 
     
 const calculateTimeAgo = (timestamp) => {
@@ -194,19 +196,13 @@ const calculateTimeAgo = (timestamp) => {
     return `${daysAgo} ${daysAgo === 1 ? 'day' : 'days'} ago`;
   }
 };
-const [value, setValue] = useState('recents');
-const handleChange = (event, newValue) => {
-  setValue(newValue);
-};
-const toProfile = () => {
-      
-  navigate('/profile', { state: { user } });
 
-}
-const toUsers = () => {
-  navigate('/users', { state: { user } });
+const handleChange = (event, newValue) => {setValue(newValue);}; // Changes value text for mobile navbar
 
-}
+
+const toProfile = () => {navigate('/profile', { state: { user } });}
+
+const toUsers = () => {navigate('/users', { state: { user } });}
 
 const logout = () => {
 signOut(auth).then(()=> {
@@ -216,13 +212,6 @@ signOut(auth).then(()=> {
   console.log(err);
 })
 }
-
-
-
-
-//TODO:
-
-
 
 
 const upload = () => {
@@ -296,84 +285,83 @@ const editBio = () => {
         <div className="homepage">
         <SideBar/>
             <div className="profile-container">
-            {displayLog ? 
-                <Alert variant="filled" severity="success" className="alertBox"
-                          >
+              {displayLog ? 
+                <Alert variant="filled" severity="success" className="alertBox">
                     {logMsg}
-        </Alert> : <></>}
+                </Alert> 
+                : <></>
+                }
                     <div className="profile-header">
                         <div className="profile-header-details">
-                          <div className="profile-header-tags">
-                            <Button onClick={()=>goBack()} className="goback-btn"><KeyboardReturnIcon/></Button>
-                            <h4 className="profile-header-username">{user.username}</h4>
-                            <p className="profile-postAmount">{postCount} Posts</p>
-                          
-                          </div>
+                            <div className="profile-header-tags">
+                              <Button onClick={()=>goBack()} className="goback-btn"><KeyboardReturnIcon/></Button>
+                              <h4 className="profile-header-username">{user.username}</h4>
+                              <p className="profile-postAmount">{postCount} Posts</p>
+                            </div>
 
                           <div className="editProfile">
-                           {currentUser.uid == user.uid ? <Button variant="outlined" sx={{ color: '#176daf', backgroundColor: '#161616' }} className="editProfile" onClick={()=>handleOpen()}>Edit Profile</Button> : <></> }
+                              {currentUser.uid == user.uid 
+                                ? 
+                                <Button variant="outlined" sx={{ color: '#176daf', backgroundColor: '#161616' }} 
+                                        className="editProfile" onClick={()=>handleOpen()}>Edit Profile</Button
+                                > 
+                                : <></> }
                             <Backdrop
-                                    sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+                              sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
                               open={open}
                             >
                               <div className="editingBio">
-                              <div className="editingBio-header">
-                              <h2>New Bio</h2>
-                              <ClearIcon onClick={()=>handleClose()}/>
-                              </div>
-                              <div className="bioInput">
-                                <TextField id="standard-basic"  
-                                          variant="standard" fullWidth   
-                                          color="warning" onChange={(e)=>setNewBio(e.target.value)}
-                                          inputProps={{ maxLength: 100 } }
-                                          value={bio}
-                                          />                              
-                                <button onClick={()=>editBio()} className="bioChangeBtn">Update Bio</button>
-                              </div>
-                                <p>{bio.length}/100</p>
+                                <div className="editingBio-header">
+                                  <h2>New Bio</h2>
+                                  <ClearIcon onClick={()=>handleClose()}/>
+                                </div>
+                                <div className="bioInput">
+                                  <TextField id="standard-basic"  
+                                            variant="standard" fullWidth   
+                                            color="warning" onChange={(e)=>setNewBio(e.target.value)}
+                                            inputProps={{ maxLength: 100 } }
+                                            value={bio}
+                                            />                              
+                                  <button onClick={()=>editBio()} className="bioChangeBtn">Update Bio</button>
+                                </div>
+                                  <p>{bio.length}/100</p>
                               </div>
                             </Backdrop>
                           </div>
-
-
                         </div>
 
                     <div className="profile-details">
                         <div className="profile-user-tags">
                             <h2 className="profile-name">{user.username}</h2>
                             <p className="profile-bio">
-                                  {profileBio ? profileBio : "No Bio."}
+                              {profileBio ? profileBio : "No Bio."}
                             </p>
                         </div>
                         <div className="profile-pfp">
-  <label htmlFor="fileInput" className="alignadd">
-    {profileImage ? (
-      <div className="profile-pfp-container">
-      <img src={profileImage} alt="pfp" className="pfp" />
-      {currentUser.uid == user.uid ?
-      <>
-       <h1 className="changePFP">+</h1>
-       <input id="fileInput" type="file" onChange={(event) => { setImageUpload(event.target.files[0]) }} style={{ display: 'none' }} /> 
-      </>
-       : <></> }
-
-</div>
-      ) : (
-      <div className="profile-pfp-container">
-        <img src={profilePFP} alt="pfp" className="pfp" />
-        {currentUser.uid == user.uid ?
-        <>
-        <h1 className="changePFP">+</h1>
-       <input id="fileInput" type="file" onChange={(event) => { setImageUpload(event.target.files[0]) }} style={{ display: 'none' }} /> 
-        </>
-        : <></> }
-      </div>
-
-
-
-    )}
-  </label>
-</div>
+                            <label htmlFor="fileInput" className="alignadd">
+                              {profileImage ? (
+                                <div className="profile-pfp-container">
+                                  <img src={profileImage} alt="pfp" className="pfp" />
+                                  {currentUser.uid == user.uid ?
+                                    <>
+                                      <h1 className="changePFP">+</h1>
+                                      <input id="fileInput" type="file" onChange={(event) => { setImageUpload(event.target.files[0]) }} style={{ display: 'none' }} /> 
+                                    </>
+                                  : <></> }
+                                </div>
+                                ) : (
+                                <div className="profile-pfp-container">
+                                  <img src={profilePFP} alt="pfp" className="pfp" />
+                                  {currentUser.uid == user.uid ?
+                                    <>
+                                      <h1 className="changePFP">+</h1>
+                                       <input id="fileInput" type="file" onChange={(event) => { setImageUpload(event.target.files[0]) }} style={{ display: 'none' }} /> 
+                                    </>
+                                  : <></> }
+                                </div>
+                              )}
+                            </label>
+                        </div>
                     </div>
                    
                     </div>
@@ -382,45 +370,31 @@ const editBio = () => {
 
 {/* STILL WORKING BELOW JUST PASTED */}
                     <div className="feed">
-                    <div className="profile-nav">
-                            <Button variant="text" sx={{ color: '#176daf' }} className="feedChange" onClick={()=>setFeed('posts')}><h3>Posts</h3></Button>
-                            <Button variant="text" sx={{ color: '#176daf' }} className="feedChange" onClick={()=>setFeed('replies')}><h3>Replies</h3></Button>
-                    </div>
+                      <div className="profile-nav">
+                              <Button variant="text" sx={{ color: '#176daf' }} className="feedChange" onClick={()=>setFeed('posts')}><h3>Posts</h3></Button>
+                              <Button variant="text" sx={{ color: '#176daf' }} className="feedChange" onClick={()=>setFeed('replies')}><h3>Replies</h3></Button>
+                      </div>
+                            {/* THIS IF USER HAS no posts */}
+                        {feed == 'posts' ? (
 
-              {feed == 'posts' ? (
-
-                  (lonelyPage ? (
-                    <div className="apost">
-                      <h2 className="post-message" >Its lonely here ... </h2>
-                  </div>
-                   ) : (
-
+                            (lonelyPage ? (
+                              <div className="apost">
+                                <h2 className="post-message" >Its lonely here ... </h2>
+                            </div>
+                            ) : (
                     
-              <ul>
-              {posts.map((post) => {
+                          <ul>
+                
+                {posts.map((post) => {
 
-// console.log(post)
-
-// const userPosterRef = doc(db, 'users', post.userId);
-// // Get the user document data
-// getDoc(userPosterRef).then((userDoc) => {
-//   if (userDoc.exists()) {
-//     // Access the user's profile image
-//     const userPFP = userDoc.data().profileImage;
-//   } else {
-//     console.log("No pfp")
-//   }
-//               })
-              
                   return (
                       <div key={post.id} className="apost">
                    
                         <div className="mainpost">
-                          <div className="upperpost">
-                          <div className="pfp-img-container">
-                          <img src={profileImage ? profileImage : profilePFP} alt="User PFP" />
-
-                        </div>
+                            <div className="upperpost">
+                              <div className="pfp-img-container">
+                                <img src={profileImage ? profileImage : profilePFP} alt="User PFP" />
+                              </div>
                               <div className="usertags">
                                 <p>@{post.Username}</p>
                                 <p>{calculateTimeAgo(post.Date)}</p>
@@ -432,18 +406,17 @@ const editBio = () => {
                           <hr className="post-separator" /> {/* Add a horizontal line at the bottom of each post */}
                         </div>
                       </div>
-)})}
-              </ul>
+                  )})}
+                            </ul>
 
               ))                
 
                ) : (
           //REPLIES TAB, just copied the post tab so classes are the same
-
           noReplies ? (
             <div className="apost">
               <h2 className="post-message" >This person hasnt responsed to anything ... </h2>
-          </div>
+            </div>
            ) : (
           <ul>
           {replies.map((reply) => (
@@ -466,7 +439,6 @@ const editBio = () => {
                   </div>
             ))}
           </ul>
-            
           ))}
             </div>
 
@@ -475,34 +447,34 @@ const editBio = () => {
 
         <UsersBar/>
         <div className="bottom-profile-nav">
-        <BottomNavigation  value={value} onChange={handleChange} className="bottom-nav-profile">
-      <Link to="/homepage">
-      <BottomNavigationAction
-        label="Home"
-        value="Home"
-        icon={<HomeIcon fontSize='large'/>}
-      />
-      </Link>
-      <BottomNavigationAction
-        onClick={()=>{toProfile()}}
-        label="Profile"
-        value="Profile"
-        icon={<PersonIcon fontSize='large'/>}
-      />
-      <BottomNavigationAction
-        onClick={()=>toUsers()}
-        label="Users"
-        value="Users"
-        icon={<PersonIcon fontSize='large'/>}
-      />
-    <BottomNavigationAction
-        onClick={()=>{logout()}}
-        label="Logout"
-        value="Logout"
-        icon={<LogoutIcon fontSize='large'/>}
-      />
-      
-    </BottomNavigation>
+          <BottomNavigation  value={value} onChange={handleChange} className="bottom-nav-profile">
+            <Link to="/homepage">
+            <BottomNavigationAction
+              label="Home"
+              value="Home"
+              icon={<HomeIcon fontSize='large'/>}
+            />
+            </Link>
+            <BottomNavigationAction
+              onClick={()=>{toProfile()}}
+              label="Profile"
+              value="Profile"
+              icon={<PersonIcon fontSize='large'/>}
+            />
+            <BottomNavigationAction
+              onClick={()=>toUsers()}
+              label="Users"
+              value="Users"
+              icon={<PersonIcon fontSize='large'/>}
+            />
+          <BottomNavigationAction
+              onClick={()=>{logout()}}
+              label="Logout"
+              value="Logout"
+              icon={<LogoutIcon fontSize='large'/>}
+            />
+            
+        </BottomNavigation>
     </div>
         </div>
     )

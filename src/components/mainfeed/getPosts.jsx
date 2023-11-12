@@ -1,5 +1,5 @@
 import { getDocs, doc, collection } from "firebase/firestore";
-import { db } from "../../../FB-config/Firebase-config";
+import { db } from "../../FB-config/Firebase-config";
 
 export const getPosts = async () => {
   //goes to general posts collection (all posts of all users)
@@ -7,7 +7,6 @@ export const getPosts = async () => {
       const postsCollectionRef = collection(db, 'posts');
       const querySnapshot = await getDocs(postsCollectionRef);
       const postsData = [];
-  
 
     //for each post, do this
       const fetchLikesPromises = querySnapshot.docs.map(async (docSnap) => {

@@ -13,7 +13,7 @@ const UsersBar = () => {
   const [randomUsers, setRandomUsers] = useState([]); 
 
 
-  //5 RANDOM USERS TO DISPLAY IN 'suggested users to follow side bar'
+  //5 RANDOM USERS TO DISPLAY IN ' 'suggested' users to follow side bar'
   const getRandomUsers = async (db, collectionName, numUsers) => {
     try {
       const collectionRef = collection(db, collectionName);
@@ -24,7 +24,7 @@ const UsersBar = () => {
         ...doc.data(),
       }));
   
-    //  Fisher-Yates shuffle
+    //  Fisher-Yates shuffle algo
       for (let i = users.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
         [users[i], users[j]] = [users[j], users[i]];
