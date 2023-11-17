@@ -1,4 +1,4 @@
-# Life Invader
+# Life Invader 👁️
 
 A social Media/Twitter Clone that has the basic features of any Social Sharing App.
 
@@ -6,11 +6,15 @@ Link to Project: <a src="https://lifein-e0258.web.app/">https://lifein-e0258.web
 
 <img src="https://i.gyazo.com/5bf05e995b5b6c2fe01c86e58fddad10.png" style="width:1500px; height:500px"/>
 
-## Getting Started
+
+
+## 👇 Getting Started 👇
+
 
 ### How It's made:
 
-**Tech used**: HTML, CSS, JavaScript, ReactJS, MaterialUI, Firebase/Store
+**Tech used** 🖥️: 
+HTML, CSS, JavaScript, ReactJS, MaterialUI, Firebase/Store
 
 I first utilized HTML, CSS, and Javascript to create the foundational elements of the user Interface. 
 I then used MaterialUI to give a more consistent and visualy appealing User Interface using their modern design components.
@@ -21,7 +25,10 @@ Moving to the backend, Firebase plays the main role to data management and user 
 Keep collections of indivudal useres and sub collections of each user, storing the user's likes, posts, replies, etc.
 It stores and rerieves user-content, their profile pictures, and thier logins.
 
-## Lessons Learned and Final Thoughts:
+
+
+
+## Lessons Learned and Final Thoughts 🧠:
 
 Overall I am proud of the App I've coded, I've been able to implement good practices that I've missed on previous projects and also implemented new ones.
    ex.   Reusable functions = reduced redundacy
@@ -37,7 +44,9 @@ If I could go back and redo some of the code, i would
 
    I also regret not noticing firebase had a real time database, I only used firestore, so some problems arised listed below
 
-## Known bugs
+
+
+## Known bugs 🥲
 
    - Time Stamp on mainfeed, not showing, code is commented out and works when used, but interferes with another part of the code I forgot.
    - Nn profile tab, the users post id is different than mainfeed post id, so viewpost function cant find it RIP, data inconsistency and not planning ahead was my fault. The reason for this is beacuse I have a posts collection and a users -> user -> posts collection. And firebase DB each db has its        own id.
