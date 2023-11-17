@@ -4,7 +4,7 @@ A social Media/Twitter Clone that has the basic features of any Social Sharing A
 
 Link to Project: <a src="https://lifein-e0258.web.app/">https://lifein-e0258.web.app/</a>
 
-<img src="https://i.gyazo.com/5bf05e995b5b6c2fe01c86e58fddad10.png" style="width:500px; height:500px"/>
+<img src="https://i.gyazo.com/5bf05e995b5b6c2fe01c86e58fddad10.png" style="width:900px; height:500px"/>
 
 ## Getting Started
 
